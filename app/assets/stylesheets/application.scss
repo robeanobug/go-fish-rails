@@ -1,4 +1,4 @@
-@import '@rolemodel/optics/dist/scss/optics';
+// @import '@rolemodel/optics/dist/scss/optics';
 // This is a manifest file that'll be compiled into application.css, which will include
 // all the files listed below.
 //
@@ -9,6 +9,7 @@
 // @import "./override/accordion.css";
 
 /* Game Page Content */
+@import "./app-body.css"
 // @import "./feed-bubble.css";
 // @import "./feed-input.css";
 // @import "./feed-output.css";
