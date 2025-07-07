@@ -1,1 +1,21 @@
-h1 Games
+.app-with-sidebar
+  nav class="sidebar sidebar--drawer"
+    a class="sidebar__brand" href="/index.html"
+      span Go Fish
+      span The Logo
+    .sidebar__content.sidebar__content--start
+      a href="../home/index.html"
+        button class="btn btn--no-border" Games
+      button class="btn btn--no-border" Stats
+    .sidebar__content.sidebar__content--end
+      .divider
+      button class="btn btn--no-border" Profile
+      button class="btn btn--no-border" Log Out
+
+
+  .app-body
+    .app__header 
+      span class="game__heading" Your Games 
+      button class="btn btn--primary"
+        span class="material-symbols-outlined icon" add
+        span New Game 
