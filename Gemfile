@@ -73,3 +73,5 @@ end
 group :test do
   gem "test-prof"
 end
+
+gem "slim", "~> 5.2"
