@@ -698,6 +698,13 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.0.200.tgz#1d27d9d55e45266e061190db045925e0b4d53d6b"
   integrity sha512-EDqWyxck22BHmv1e+mD8Kl6GmtNkhEPdRfGFT7kvsv1yoXd9iYrqHDVAaR8bKmU/syC5eEZ2I5aWWxtB73ukMw==
 
+"@rolemodel/optics@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@rolemodel/optics/-/optics-2.1.4.tgz#395e1d99a33dbabf0741dc2d0629acd1acb4c914"
+  integrity sha512-rFPef6O6HHURt645yCgv3kGy7v8mgbf71DupKrGJI5M2P6VaMh37ffEm+H4cVijD6M5bb6i4hfLTmGlwBPWXxA==
+  dependencies:
+    modern-css-reset "^1.4.0"
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
@@ -1941,6 +1948,11 @@ mini-css-extract-plugin@^2.9.2:
   dependencies:
     schema-utils "^4.0.0"
     tapable "^2.2.1"
+
+modern-css-reset@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/modern-css-reset/-/modern-css-reset-1.4.0.tgz#5bee4d11eeca2ff19b882c6e8f1769773e792d04"
+  integrity sha512-0crZmSFmrxkI7159rvQWjpDhy0u4+Awg/iOycJdlVn0RSeft/a+6BrQHR3IqvmdK25sqt0o6Z5Ap7cWgUee2rw==
 
 nanoid@^3.3.11:
   version "3.3.11"

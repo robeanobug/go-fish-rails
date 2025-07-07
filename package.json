@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.16"
+    "@hotwired/turbo-rails": "^8.0.16",
+    "@rolemodel/optics": "^2.1.4"
   },
   "type": "module"
 }
