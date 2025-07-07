@@ -1,0 +1,33 @@
+.app-body {
+  display: flex;
+  flex-direction: column;
+  display: inline-flex;
+
+  align-items: center;
+  gap: var(--op-space-x-small);
+
+  padding: var(--op-space-2x-large) var(--op-space-3x-large);
+
+  background-color: var(--op-color-neutral-plus-max);
+  color: var(--op-color-neutral-on-plus-max);
+  > * {
+    width: 80%;
+  }
+
+  .app__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    padding-bottom: var(--op-space-x-small);
+    
+    .game__heading {
+        padding-top: var(--op-space-2x-large);
+    }
+  }
+
+  .app__content {
+    max-width: var(--op-breakpoint-large);
+    padding: 0;
+  }
+}
