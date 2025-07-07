@@ -1,11 +1,12 @@
 doctype html
-html
+html data-theme-mode='light'
   head
     title Go Fish Rails
     = csrf_meta_tags
     = csp_meta_tag
     = stylesheet_link_tag 'application', 'data-turbo-track': 'reload'
     = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
+    link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rolemodel/optics@2.1.3/dist/css/optics.css'
     meta content="width=device-width, initial-scale=1" name="viewport"
   body.app-body
     .app__content
