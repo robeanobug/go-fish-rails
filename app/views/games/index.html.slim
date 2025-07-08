@@ -1,10 +1,10 @@
 .app-with-sidebar
   nav class="sidebar sidebar--drawer"
-    a class="sidebar__brand" href="/index.html"
+    a class="sidebar__brand" href="/"
       span Go Fish
       span The Logo
     .sidebar__content.sidebar__content--start
-      a href="../home/index.html"
+      a href="/"
         button class="btn btn--no-border" Games
       button class="btn btn--no-border" Stats
     .sidebar__content.sidebar__content--end
@@ -16,6 +16,7 @@
   .app-body
     .app__header 
       span class="game__heading" Your Games 
-      button class="btn btn--primary"
-        span class="material-symbols-outlined icon" add
-        span New Game 
+      a href="./games/:id(.:format)"
+        button class="btn btn--primary"
+          span class="material-symbols-outlined icon" add
+          span New Game 
