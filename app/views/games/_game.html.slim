@@ -23,6 +23,7 @@
             game_path(game),
             class: "btn btn--light btn--small"
     - else 
-      = link_to "Join",
-            game_path(game),
+      = button_to "Join",
+            game_users_path,
+            params: { user_id: current_user, game_id: game },
             class: "btn btn--light btn--small"
