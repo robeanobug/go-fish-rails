@@ -1,5 +1,12 @@
-main class="container"
-  = link_to sanitize("&larr; Back to games"), games_path
-  .header
-    h1
-      = @game.name
+main.game-page
+  .panel.panel--main 
+    .panel__header 
+      = link_to sanitize("&larr; Back to games"), games_path
+      .game-board-heading
+        = @game.name
+    .players-content 
+      .player-deck-content 
+        span.game__heading.game__heading--players Players
+        details.accordion.accordion--player
+  .panel.panel--side
+  
