@@ -4,8 +4,9 @@
       span Go Fish
       span The Logo
     .sidebar__content.sidebar__content--start
-      a href="/"
-        button class="btn btn--no-border" Games
+      = link_to "Games",
+              games_path,
+              class: "btn btn--no-border"
       button class="btn btn--no-border" Stats
     .sidebar__content.sidebar__content--end
       .divider
