@@ -1,0 +1,18 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: pink;
+    padding: var(--op-space-x-small) var(--op-space-medium);
+    
+    > * {
+        display: flex;
+        align-items: center;
+        gap: var(--op-space-x-large);
+    }
+    
+    .card__subtitle {
+        color: var(--op-color-neutral-on-plus-eight-alt);
+        font-size: var(--op-font-small);
+    }
+}

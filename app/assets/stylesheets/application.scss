@@ -9,7 +9,11 @@
 // @import "./override/accordion.css";
 
 /* Game Page Content */
-@import "./app-body.css";
+@import "./app-body";
+@import "./card";
+@import "./game-board";
+@import "./game-page.css";
+@import "./panel"
 // @import "./feed-bubble.css";
 // @import "./feed-input.css";
 // @import "./feed-output.css";

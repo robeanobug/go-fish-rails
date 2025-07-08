@@ -1,0 +1,9 @@
+.game__board {
+  background-color: var(--op-color-primary-plus-max);
+  color: var(--op-color-primary-on-plus-max);
+}
+
+.game-board-heading {
+  font-size: var(--op-font-large);
+  font-weight: var(--op-font-weight-semi-bold);
+  }
