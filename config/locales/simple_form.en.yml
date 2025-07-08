@@ -11,5 +11,5 @@ en:
   helpers:
     submit:
       game:
-        create: Create quote
-        update: Update quote
+        create: Create game
+        update: Update game
