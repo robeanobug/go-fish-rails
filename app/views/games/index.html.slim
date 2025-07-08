@@ -20,4 +20,8 @@
       = link_to "New Game",
               new_game_path,
               class: "btn btn--primary"
-    = render @games
+    - @games.each do |game|
+      = render game if game.users.first == current_user
+    span class="game__heading" All Games 
+    - @games.each do |game|
+      = render game unless game.users.first == current_user

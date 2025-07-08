@@ -1,11 +1,28 @@
 .card
   .game
-    = link_to game.name, game_path(game)
+    span = link_to game.name, game_path(game)
+    div
+      - if game.users.count == game.player_count
+        span.card__subtitle This Game is Full
+      - else 
+        span.card_subtitle
+          = game.users.count 
+          = " / "
+          = game.player_count
+          = " players"
   .game__actions
-    = button_to "Delete",
-          game_path(game),
-          method: :delete,
-          class: "btn btn--light"
-    = link_to "Edit",
-          edit_game_path(game),
-          class: "btn btn--light"
+    - if game.users.first == current_user
+      = button_to "Delete",
+            game_path(game),
+            method: :delete,
+            class: "btn btn--destructive btn--small"
+      = link_to "Edit",
+            edit_game_path(game),
+            class: "btn btn--light btn--small"
+      = link_to "Play Now",
+            game_path(game),
+            class: "btn btn--light btn--small"
+    - else 
+      = link_to "Join",
+            game_path(game),
+            class: "btn btn--light btn--small"
