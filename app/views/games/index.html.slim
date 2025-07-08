@@ -10,7 +10,7 @@
     .sidebar__content.sidebar__content--end
       .divider
       button class="btn btn--no-border" Profile
-      button class="btn btn--no-border" Log Out
+      = button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn--no-border"
 
 
   .app-body
@@ -19,3 +19,4 @@
       = link_to "New Game",
               new_game_path,
               class: "btn btn--primary"
+    = render @games
