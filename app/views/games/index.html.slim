@@ -16,7 +16,6 @@
   .app-body
     .app__header 
       span class="game__heading" Your Games 
-      a href="./games/:id(.:format)"
-        button class="btn btn--primary"
-          span class="material-symbols-outlined icon" add
-          span New Game 
+      = link_to "New Game",
+              new_game_path,
+              class: "btn btn--primary"

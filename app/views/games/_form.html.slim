@@ -1,0 +1,10 @@
+= simple_form_for game, html: { class: "form-group game form" } do |f|
+  - if game.errors.any?
+    .error-message"
+      = game.errors.full_messages.to_sentence.capitalize
+
+  = f.input :name, input_html: { autofocus: true }, type: "String", placeholder: "Game 1", class: "form-control form-control--large"
+  
+  = f.input :player_count, type: "Number", placeholder: "2", class: "form-control form-control--large"
+
+  = f.submit class: "btn btn--secondary"

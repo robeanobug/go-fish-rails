@@ -1,0 +1,15 @@
+
+en:
+  simple_form:
+    placeholders:
+      name:
+        name: Name of your game
+    labels:
+      game:
+        name: Name
+
+  helpers:
+    submit:
+      game:
+        create: Create quote
+        update: Update quote
