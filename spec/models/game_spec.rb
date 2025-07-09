@@ -1,11 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  it 'inflates a GoFish game from JSON' do
-    user1 = create(:user)
-    user2 = create(:user)
-
-    go_fish_json = {
+  let(:go_fish_json) do
+    {
       'players' => [ {
         'user_id' => user1.id,
         'name' => user1.username,
@@ -31,7 +28,9 @@ RSpec.describe Game, type: :model do
       'deck' => {
         'cards' => [ { 'suit' => 'Diamonds', 'rank' => 'Two' } ]
       }
-    }
+    } 
+  end
+  it 'inflates a GoFish game from JSON' do
     game = create(:game, go_fish: go_fish_json)
 
     expect(game.go_fish.players.map(&:name)).to match_array [ user1.username, user2.username ]
