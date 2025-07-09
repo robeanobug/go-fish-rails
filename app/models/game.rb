@@ -3,10 +3,10 @@ class Game < ApplicationRecord
   has_many :users, through: :game_users
 
   validates :name, presence: true
-  validates :player_count, numericality: { greater_than: 1, less_than: 7 }
+  validates :player_count, numericality: { greater_than: 1, less_than_or_equal_to: 6 }
 
   # serialize :go_fish, GoFish
-  
+
   # def start!
   #   return false unless player_count == users.count
 
