@@ -22,7 +22,7 @@ RSpec.describe "Users", type: :system do
     it 'signs up a user' do
       visit new_user_registration_path
       expect(page).to have_text("Sign up")
-
+      fill_in "user_username", with: build_user.username
       fill_in "user_email", with: build_user.email
       fill_in "user_password", with: build_user.password
       fill_in "user_password_confirmation", with: build_user.password

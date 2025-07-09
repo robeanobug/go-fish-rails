@@ -1,15 +1,16 @@
 class Player
   attr_reader :name
-  attr_accessor :hand, :books
+  attr_accessor :hand, :books, :user_id
 
   BASE_HAND_SIZE = 7
   SMALL_HAND_SIZE = 5
   BOOK_LENGTH = 4
 
-  def initialize(name, hand = [], books = [])
+  def initialize(name, hand = [], books = [], user_id = 0)
     @name = name
     @hand = hand
     @books = books
+    @user_id = 0
   end
 
   def self.from_json(json)
@@ -22,9 +23,10 @@ class Player
 
   def as_json(*)
     {
+      user_id: user_id,
       name: name,
       hand: hand.map(&:as_json),
-      books: books.map { |book|  book.map(&:as_json) },
+      books: books.map { |book|  book.map(&:as_json) }
     }.stringify_keys
   end
 end

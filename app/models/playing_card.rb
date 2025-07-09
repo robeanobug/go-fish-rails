@@ -7,4 +7,9 @@ class PlayingCard
     @rank = rank
     @suit = suit
   end
+
+  def ==(card)
+    rank == card.rank &&
+    suit == card.suit
+  end
 end

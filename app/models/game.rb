@@ -5,8 +5,6 @@ class Game < ApplicationRecord
   validates :name, presence: true
   validates :player_count, numericality: { greater_than: 1, less_than_or_equal_to: 6 }
 
-  attr_accessor :go_fish
-
   serialize :go_fish, coder: GoFish
 
   # def start!

@@ -1,5 +1,5 @@
 class GoFish
-  attr_accessor :players, :current_player, :deck
+  attr_accessor :players, :current_player, :deck, :current_player_index
   def initialize(players = [], deck = Deck.new, current_player_index = 0)
     @players = players
     @current_player = players[current_player_index]
@@ -7,13 +7,14 @@ class GoFish
   end
 
   def self.from_json(json)
+    current_player_index = json['current_player_index']
     players = json['players'].map do |player_hash|
       Player.from_json(player_hash)
     end
     deck = Deck.new(json['deck']['cards'].map do |card_hash|
        PlayingCard.new(**card_hash.symbolize_keys)
      end)
-    self.new(players, deck, json['current_player_index'])
+    self.new(players, deck, current_player_index)
   end
 
   def self.load(json)
