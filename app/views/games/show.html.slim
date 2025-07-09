@@ -6,7 +6,31 @@ main.game-page
         = @game.name
     .players-content 
       .player-deck-content 
-        span.game__heading.game__heading--players Players
-        details.accordion.accordion--player
   .panel.panel--side
-  
+    .panel__header.panel__header--alt
+      span.game__heading Game Feed
+      / - if @game.users.empty?
+        / .badge.badge--primary
+          / = "#{@game.current_player.name}'s Turn"
+    .feed
+      .feed__container 
+        .feed__output
+          .feed__response
+          .feed__response
+        .player-inputs 
+          .form-group
+            label for="player" class="form-label" Player
+            select name="player" id="player" class="form-control form-control--small"
+          .form-group
+            label for="card-rank" class="form-label" Card Rank
+            select name="card-rank" id="card-rank" class="form-control form-control--small"
+          button class="btn btn--primary btn--small" Request
+  .panel.panel--sub
+    .panel__header.panel__header--sub
+      span Your Hand
+    .hand
+        .playing-cards
+  .panel.panel--sub
+    .panel__header.panel__header--sub
+      span Books
+    .hand
