@@ -5,7 +5,9 @@ class Game < ApplicationRecord
   validates :name, presence: true
   validates :player_count, numericality: { greater_than: 1, less_than_or_equal_to: 6 }
 
-  # serialize :go_fish, GoFish
+  attr_accessor :go_fish
+
+  serialize :go_fish, coder: GoFish
 
   # def start!
   #   return false unless player_count == users.count
@@ -13,7 +15,7 @@ class Game < ApplicationRecord
   #   players = users.map { |user| Player.new(user.id) }
   #   go_fish = GoFish.new(players)
   #   go_fish.deal!
-  #   update(go_fish: go_fish, started_at: Time.zone.now)
+  #   update(go_fish: go_fish)
   # end
 
   # def play_round!
