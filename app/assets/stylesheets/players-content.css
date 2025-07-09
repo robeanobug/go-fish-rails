@@ -1,0 +1,10 @@
+.players-content {
+  padding-inline: var(--op-space-3x-large);
+  padding-top: var(--op-space-2x-large);
+}
+.player-deck-content {
+  height: 100%;
+  gap: var(--op-space-x-small);
+  display: flex;
+  flex-direction: column;
+}

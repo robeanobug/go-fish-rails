@@ -1,0 +1,14 @@
+.player-inputs {
+  padding-inline: var(--op-space-small);
+  padding-bottom: var(--op-space-small);
+  display: grid;
+  grid-column-gap: var(--op-space-small);
+  grid-template-columns: 1fr 1fr;
+  border-radius: var(--op-radius-x-large);
+  border: var(--op-border-width) solid var(--op-color-primary-plus-six);
+  background-color: var(--op-color-primary-plus-seven);
+  color: var(--op-color-primary-on-plus-seven);
+  .btn {
+    grid-column: 1 / -1;
+  }
+}

@@ -1,0 +1,22 @@
+.feed__container {
+  padding: var(--op-space-medium);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.feed__output {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  gap: var(--op-space-x-small)
+}
+
+.feed__response {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--op-space-x-small);
+  padding-inline: var(--op-space-small);
+}

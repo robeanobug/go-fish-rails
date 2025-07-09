@@ -1,0 +1,8 @@
+.game__heading {
+  font-size: var(--op-font-small);
+  font-weight: var(--op-font-weight-semi-bold);
+  }
+
+.game__heading--players {
+  padding-bottom: var(--op-space-x-small);
+}
