@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "User", type: :system, chrome: true do
+RSpec.describe "Users", type: :system do
   let!(:user) { create(:user) }
   let(:game) { build(:game) }
 
