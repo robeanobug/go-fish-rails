@@ -12,15 +12,6 @@ class Player
     @books = books
   end
 
-  def self.dump(obj)
-    obj.as_json
-  end
-
-  def self.load(json)
-    return nil if json.blank?
-    self.from_json(json)
-  end
-
   def self.from_json(json)
     hand = json['hand'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
     books = json['books'].map do |book|
