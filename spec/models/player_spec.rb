@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Player do
   let(:player) { Player.new('Player 1') }
-  let(:player_hash) { Player.dump(player) }
+  let(:player_hash) { Player.as_json(player) }
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
@@ -32,7 +32,7 @@ RSpec.describe Player do
     expect(player_hash).to have_key('books')
   end
   it 'should return object from json' do
-    player = Player.load(player_hash)
+    player = Player.from_json(player_hash)
     expect(player.name).to be_a String
     expect(player.hand).to be_a Array
     expect(player.books).to be_a Array
