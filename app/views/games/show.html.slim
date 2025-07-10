@@ -27,6 +27,8 @@ main.game-page
           .form-group
             label for="card-rank" class="form-label" Card Rank
             select name="card-rank" id="card-rank" class="form-control form-control--small"
+              - @game.find_player(current_user).hand.each do |card|
+                option = card.rank
           button class="btn btn--primary btn--small" Request
   .panel.panel--sub
     .panel__header.panel__header--sub

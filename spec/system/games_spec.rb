@@ -41,10 +41,18 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   describe 'displays correct form information' do
-    it 'should show opponent names' do
+    before do
       load_game_user2
+    end
+    it 'should show opponent names' do
       within '.player-inputs' do
         expect(page).to have_text(user1.username)
+      end
+    end
+    fit 'should show the current player cards' do
+      within '.player-inputs' do
+        player2_card_rank = game.go_fish.players.last.hand.first.rank
+        expect(page).to have_text(player2_card_rank)
       end
     end
   end
