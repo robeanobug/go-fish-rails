@@ -27,10 +27,19 @@ RSpec.describe Player do
   it 'has a user_id' do
     expect(player.user_id).to be_a(Integer)
   end
+  it 'adds cards to the hand' do
+    player.add_cards([ace_clubs, ace_diamonds])
+    expect(player.hand).to eq([ace_spades, ace_hearts, ace_clubs, ace_diamonds])
+  end
+  it 'adds a card to the hand' do
+    player.add_cards(ace_diamonds)
+    expect(player.hand).to eq([ ace_spades, ace_hearts, ace_diamonds ])
+  end
   it 'should create a hash' do
     player_hash = player.as_json
     expect(player_hash).to be_a Hash
     expect(player_hash).to have_key('name')
+    expect(player_hash).to have_key('user_id')
     expect(player_hash).to have_key('hand')
     expect(player_hash).to have_key('books')
   end
@@ -38,6 +47,7 @@ RSpec.describe Player do
     player_hash = player.as_json
     player = Player.from_json(player_hash)
     expect(player.name).to be_a String
+    expect(player.user_id).to be_a Integer
     expect(player.hand).to be_a Array
     expect(player.books).to be_a Array
   end

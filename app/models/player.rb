@@ -6,26 +6,40 @@ class Player
   SMALL_HAND_SIZE = 5
   BOOK_LENGTH = 4
 
-  def initialize(name, hand = [], books = [], user_id = 0)
+  def initialize(name, user_id = 0, hand = [], books = [])
     @name = name
+    @user_id = user_id
     @hand = hand
     @books = books
-    @user_id = 0
+  end
+
+  def add_cards(cards)
+    if cards.is_a?(PlayingCard)
+      hand << cards
+    else
+      cards.each { |card| hand << card }
+    end
   end
 
   def self.from_json(json)
-    hand = json['hand'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
-    books = json['books'].map do |book|
-      book.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
+    hand = json['hand'].map do |card_hash|
+      binding.irb unless PlayingCard.new(**card_hash&.symbolize_keys)
+
+      PlayingCard.new(**card_hash.symbolize_keys)
     end
-    self.new(json['name'], hand, books)
+    books = json['books'].map do |book|
+      book.map do |card_hash|
+      PlayingCard.new(**card_hash.symbolize_keys)
+      end
+    end
+    self.new(json['name'], json['user_id'], hand, books)
   end
 
   def as_json(*)
     {
-      user_id: user_id,
       name: name,
-      hand: hand.map(&:as_json),
+      user_id: user_id,
+      hand: hand.map { |card| { rank: card.rank, suit: card.suit } },
       books: books.map { |book|  book.map(&:as_json) }
     }.stringify_keys
   end

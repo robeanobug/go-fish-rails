@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
+  let!(:user1) { create(:user) }
+  let!(:user2) { create(:user) }
+
   let(:go_fish_json) do
     {
       'players' => [ {

@@ -7,17 +7,20 @@ class Game < ApplicationRecord
 
   serialize :go_fish, coder: GoFish
 
-  # def start!
-  #   return false unless player_count == users.count
-
-  #   players = users.map { |user| Player.new(user.id) }
-  #   go_fish = GoFish.new(players)
-  #   go_fish.deal!
-  #   update(go_fish: go_fish)
-  # end
+  def start!
+    return false unless player_count == users.count
+    players = users.map { |user| Player.new(user.username, user.id) }
+    self.go_fish = GoFish.new(players)
+    go_fish.deal!
+    save!
+  end
 
   # def play_round!
   #   go_fish.play_round!
   #   save!
   # end
+
+  def find_player(user)
+    go_fish.players.find { |player| player.user_id == user.id }
+  end
 end
