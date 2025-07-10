@@ -7,7 +7,7 @@ class Game < ApplicationRecord
 
   serialize :go_fish, coder: GoFish
 
-  def start!
+  def start_if_ready!
     return false unless player_count == users.count
     players = users.map { |user| Player.new(user.username, user.id) }
     self.go_fish = GoFish.new(players)
