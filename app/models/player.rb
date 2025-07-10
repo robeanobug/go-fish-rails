@@ -21,6 +21,10 @@ class Player
     end
   end
 
+  def ranks
+    hand.map(&:rank).uniq
+  end
+
   def self.from_json(json)
     hand = json['hand'].map do |card_hash|
       binding.irb unless PlayingCard.new(**card_hash&.symbolize_keys)

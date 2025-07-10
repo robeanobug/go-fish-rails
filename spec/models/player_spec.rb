@@ -35,6 +35,9 @@ RSpec.describe Player do
     player.add_cards(ace_diamonds)
     expect(player.hand).to eq([ ace_spades, ace_hearts, ace_diamonds ])
   end
+  it 'shows the ranks in their hand' do
+    expect(player.ranks).to eq(['Ace'])
+  end
   it 'should create a hash' do
     player_hash = player.as_json
     expect(player_hash).to be_a Hash
