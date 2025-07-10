@@ -35,7 +35,7 @@ RSpec.describe "Games", type: :system, chrome: true do
   end
 
   describe 'deals cards to players' do
-    fit 'has cards displayed' do
+    it 'has cards displayed' do
       load_game_user2
       player2 = game.find_player(user2)
       card_rank = player2.hand.first.rank
