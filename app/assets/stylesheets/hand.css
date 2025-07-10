@@ -1,0 +1,4 @@
+.hand {
+    padding: var(--op-space-medium);
+    box-shadow: var(--op-border-left) var(--op-color-neutral-plus-five);
+  }
