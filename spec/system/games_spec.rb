@@ -40,7 +40,7 @@ RSpec.describe "Games", type: :system, js: true do
     end
   end
 
-  describe 'displays correct feed information' do
+  describe 'display correct information' do
     before do
       load_game_user2
     end
@@ -58,6 +58,36 @@ RSpec.describe "Games", type: :system, js: true do
     it 'should show a badge of whose turn it is' do
       within '.badge' do
         expect(page).to have_text 'Turn'
+      end
+    end
+  end
+
+  describe 'play round' do
+    before do
+      load_game_user2
+      load_game_user1
+      visit game_path(game.id)
+      click_on 'Request'
+    end
+    fit 'should show the question' do
+      within '.feed__container' do
+        expect(page).to have_text(user1.username)
+        expect(page).to have_text('asked')
+        expect(page).to have_text(user2.username)
+      end
+    end
+    xit 'should show the response' do
+      within '.feed__container' do
+        expect(page).to have_text(user1.username)
+        expect(page).to have_text('any')
+        expect(page).to have_text(user2.username)
+      end
+    end
+    xit 'should show the action' do
+      within '.feed__container' do
+        expect(page).to have_text(user1.username)
+        expect(page).to have_text('asked')
+        expect(page).to have_text(user2.username)
       end
     end
   end
