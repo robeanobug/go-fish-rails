@@ -9,9 +9,9 @@ main.game-page
   .panel.panel--side
     .panel__header.panel__header--alt
       span.game__heading Game Feed
-      / - if @game.go_fish
-      /   .badge.badge--primary
-      /     = "#{@game.go_fish.current_player.name}'s Turn"
+      - if @game.go_fish
+        .badge.badge--primary
+          = "#{@game.go_fish.current_player.name}'s Turn"
     .feed
       .feed__container 
         .feed__output

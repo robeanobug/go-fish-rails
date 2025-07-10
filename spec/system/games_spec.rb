@@ -40,7 +40,7 @@ RSpec.describe "Games", type: :system, js: true do
     end
   end
 
-  describe 'displays correct form information' do
+  describe 'displays correct feed information' do
     before do
       load_game_user2
     end
@@ -49,10 +49,15 @@ RSpec.describe "Games", type: :system, js: true do
         expect(page).to have_text(user1.username)
       end
     end
-    fit 'should show the current player cards' do
+    it 'should show the current player cards' do
       within '.player-inputs' do
         player2_card_rank = game.go_fish.players.last.hand.first.rank
         expect(page).to have_text(player2_card_rank)
+      end
+    end
+    it 'should show a badge of whose turn it is' do
+      within '.badge' do
+        expect(page).to have_text 'Turn'
       end
     end
   end
