@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, chrome: true do
+RSpec.describe "Games", type: :system, js: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
 
@@ -10,6 +10,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     sign_in user1
     visit root_path
     click_on(game.name)
+    expect(page).to have_text('Your Hand')
   end
 
   def load_game_user2
@@ -20,17 +21,11 @@ RSpec.describe "Games", type: :system, chrome: true do
     game.reload
   end
   describe 'cannot join the same game twice' do
-    before do
-      load_game_user1
-    end
-    it 'shows the game page' do
-      expect(page).to have_text('Your Hand')
-    end
     it 'cannot join the same game twice' do
+      load_game_user1
       load_game_user2
       visit root_path
-      click_on 'Join'
-      expect(page).to have_content('Your Games')
+      expect(page).to have_no_content('Join')
     end
   end
 
@@ -44,6 +39,15 @@ RSpec.describe "Games", type: :system, chrome: true do
       expect(page).to have_css("img[alt='#{card_rank} of #{card_suit}']")
       load_game_user1
       expect(page).to have_no_css("img[alt='#{card_rank} of #{card_suit}']")
+    end
+  end
+
+  describe 'displays correct form information' do
+    it 'should show opponent names' do
+      load_game_user2
+      within '.player-inputs' do
+        expect(page).to have_text(user1.username)
+      end
     end
   end
 end

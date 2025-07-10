@@ -21,7 +21,9 @@ main.game-page
           .form-group
             label for="player" class="form-label" Player
             select name="player" id="player" class="form-control form-control--small"
-              option = current_user.username
+              - @game.users.each do |user|
+                - unless user.username == current_user.username
+                  option = user.username
           .form-group
             label for="card-rank" class="form-label" Card Rank
             select name="card-rank" id="card-rank" class="form-control form-control--small"
