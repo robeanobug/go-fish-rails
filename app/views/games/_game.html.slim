@@ -22,7 +22,11 @@
       = link_to "Play Now",
             game_path(game),
             class: "btn btn--light btn--small"
-    - else 
+    - elsif game.users.include?(current_user)
+      = link_to "Play Now",
+            game_path(game),
+            class: "btn btn--light btn--small"
+    - else
       = button_to "Join",
             game_users_path,
             params: { user_id: current_user, game_id: game },
