@@ -11,7 +11,7 @@
           = game.player_count
           = " players"
   .game__actions
-    - if game.users.first == current_user
+    - if game.game_users.first.user_id == current_user.id
       = button_to "Delete",
             game_path(game),
             method: :delete,

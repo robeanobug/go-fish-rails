@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
   let!(:user) { create(:user) }
+  let!(:other_user) { create(:user) }
   let(:game) { build(:game) }
 
-  def load_index
+  def load_index(user)
     sign_in user
     visit "/"
   end
@@ -57,18 +58,31 @@ RSpec.describe "Users", type: :system do
   end
   describe "user create game" do
     before do
-      load_index
+      load_index(other_user)
+      create_game
     end
 
     it 'can create a game' do
-      create_game
       expect(page).to have_text(game.name)
+      expect(page).to have_text("Play")
+      expect(page).to have_text("Edit")
+      expect(page).to have_text("Delete")
+    end
+    it 'should not switch the player who is in charge to the player who joins' do
+      load_index(user)
+      click_on "Join"
+      expect(page).to have_text('Your Hand')
+      click_on "Back to games"
+      expect(page).to have_text(game.name)
+      expect(page).to have_text("Play")
+      expect(page).to have_no_text("Edit")
+      expect(page).to have_no_text("Delete")
     end
   end
   
   describe "user destroy game" do
     before do
-      load_index
+      load_index(user)
       create_game
     end
     
@@ -81,7 +95,7 @@ RSpec.describe "Users", type: :system do
 
   describe "showing a game" do
     before do
-      load_index
+      load_index(user)
       create_game
     end
 
