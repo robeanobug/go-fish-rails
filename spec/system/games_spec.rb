@@ -20,13 +20,11 @@ RSpec.describe "Games", type: :system, js: true do
     expect(page).to have_content('Your Hand')
     game.reload
   end
-  describe 'cannot join the same game twice' do
-    it 'cannot join the same game twice' do
-      load_game_user1
-      load_game_user2
-      visit root_path
-      expect(page).to have_no_content('Join')
-    end
+  it 'should not show the join option after a player is in the game' do
+    load_game_user1
+    load_game_user2
+    visit root_path
+    expect(page).to have_no_content('Join')
   end
 
   describe 'deals cards to players' do
