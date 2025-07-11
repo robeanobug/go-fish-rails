@@ -1,7 +1,8 @@
 .feed__container {
   padding: var(--op-space-medium);
-  display: grid;
-  grid-row: 1fr auto;
+  display:flex;
+  /* display: grid; */
+  /* grid-row: 1fr auto; */
   flex-direction: column;
   justify-content: space-between;
   height: 65vh;
