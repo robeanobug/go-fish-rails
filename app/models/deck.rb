@@ -1,7 +1,7 @@
 class Deck
   attr_accessor :cards
   DECK_COUNT = 52
-  def initialize(cards = build_deck.shuffle)
+  def initialize(cards = build_deck)
     @cards = cards
   end
 
