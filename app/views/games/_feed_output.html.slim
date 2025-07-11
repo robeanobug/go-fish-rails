@@ -1,0 +1,21 @@
+span
+- @game.go_fish.round_results.reverse.each do |result|
+  / - if result.winner_output
+  /     div class="feed__bubble feed__bubble--game-action"
+  /     span 
+  /         = result.winner_output
+  /     - next
+  .feed__bubble.feed__bubble--main
+    span
+      = result.question
+  .feed__response
+      i.icon.ph.ph-arrow-bend-down-right
+      .feed__bubble.feed__bubble--sub
+        span
+          = result.response
+  / - unless result.action.nil?
+  /     .feed__response
+  /       i.icon.ph.ph-arrow-bend-down-right
+  /       .feed__bubble.feed__bubble--player-action
+  /         span
+  /           = result.action

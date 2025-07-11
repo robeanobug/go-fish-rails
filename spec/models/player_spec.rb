@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Player do
   let(:player) { Player.new('Player 1') }
@@ -38,6 +38,11 @@ RSpec.describe Player do
   it 'shows the ranks in their hand' do
     expect(player.ranks).to eq(['Ace'])
   end
+  it 'removes cards from their hand' do
+    player.remove_cards([ace_spades, ace_hearts])
+    expect(player.hand).to eq []
+  end
+  it 'compares players and says they are equal if they have the same information'
   it 'should create a hash' do
     player_hash = player.as_json
     expect(player_hash).to be_a Hash

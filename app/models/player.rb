@@ -21,20 +21,26 @@ class Player
     end
   end
 
+  def remove_cards(cards)
+    self.hand -= cards
+  end
+
   def ranks
     hand.map(&:rank).uniq
   end
 
-  def self.from_json(json)
-    hand = json['hand'].map do |card_hash|
-      binding.irb unless PlayingCard.new(**card_hash&.symbolize_keys)
+  def ==(other_player)
+    name == other_player.name &&
+    user_id == other_player.user_id &&
+    hand == other_player.hand &&
+    books == other_player.books
+  end
 
-      PlayingCard.new(**card_hash.symbolize_keys)
-    end
+  def self.from_json(json)
+    return if json.nil?
+    hand = json['hand']&.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) } || []
     books = json['books'].map do |book|
-      book.map do |card_hash|
-      PlayingCard.new(**card_hash.symbolize_keys)
-      end
+      book.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
     end
     self.new(json['name'], json['user_id'], hand, books)
   end
@@ -43,8 +49,8 @@ class Player
     {
       name: name,
       user_id: user_id,
-      hand: hand.map { |card| { rank: card.rank, suit: card.suit } },
-      books: books.map { |book|  book.map(&:as_json) }
+      hand: hand.map { |card| { rank: card.rank, suit: card.suit }.stringify_keys },
+      books: books.map { |book| book.map { |card| { rank: card.rank, suit: card.suit }.stringify_keys } }
     }.stringify_keys
   end
 end

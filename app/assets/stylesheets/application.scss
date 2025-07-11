@@ -9,16 +9,16 @@
 // @import "./override/accordion.css";
 
 /* Game Page Content */
-@import "./app-body";
-@import "./card";
-@import "./feed-input";
-@import "./feed-output";
-@import "./game-board";
-@import "./game-heading";
-@import "./game-page";
-@import "./hand";
-@import "./panel";
-@import "./players-content";
-@import "./playing-cards.css";
-// @import "./feed-bubble.css";
-// @import "./game-board.css";
+@use "./app-body";
+@use "./card";
+@use "./feed-bubble";
+@use "./feed-input";
+@use "./feed-output";
+@use "./game-board";
+@use "./game-heading";
+@use "./game-page";
+@use "./hand";
+@use "./panel";
+@use "./players-content";
+@use "./playing-cards.css";
+// @use "./game-board.css";

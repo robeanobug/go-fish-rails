@@ -1,0 +1,12 @@
+= simple_form_for :round, url: game_rounds_path(@game), method: :post do |f|
+  = f.input :target,
+              label: 'Player',
+              collection: @game.users.reject { |user| user.username == current_user.username }.map(&:username),
+              include_blank: false,
+              label_html: { class: 'form-label' },
+              input_html: { class: 'form-control form-control--small'}
+  = f.input :requested_rank, label: 'Rank',
+              collection: @game.find_player(current_user).ranks.map { |rank| "#{rank}s"}, include_blank: false,
+              label_html: { class: 'form-label' },
+              input_html: { class: 'form-control form-control--small'}
+  = f.button :submit, 'Request', class: 'btn btn--primary btn--small'

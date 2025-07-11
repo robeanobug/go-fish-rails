@@ -1,0 +1,27 @@
+.feed__bubble {
+  padding: var(--op-space-small);
+  border-radius: var(--op-radius-x-large);
+  font-size: var(--op-font-x-small);
+  font-weight: var(--op-font-weight-semi-bold);
+}
+
+.feed__bubble--main {
+  background: var(--op-color-primary-plus-five);
+  color: var(--op-color-primary-on-plus-five-alt);
+  font-size: var(--op-font-medium);
+  font-weight: var(--op-font-weight-normal);
+}
+
+.feed__bubble--alert {
+  background-color: var(--op-color-alerts-warning-plus-seven);
+  color: var(--op-color-alerts-warning-on-plus-seven-alt);
+  width: 100%;
+  border: var(--op-border-width) solid var(--op-color-alerts-warning-plus-five);
+}
+
+.feed__bubble--sub {
+  background-color: var(--op-color-alerts-warning-plus-max);
+  color: var(--op-color-alerts-warning-on-plus-max);
+  width: 100%;
+  border: var(--op-border-width) solid var(--op-color-primary-plus-seven);
+}

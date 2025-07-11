@@ -1,15 +1,31 @@
 class GoFish
-  attr_accessor :players, :current_player, :deck, :current_player_index
+  attr_accessor :players, :deck, :current_player, :round_results
 
   BASE_PLAYER_COUNT = 2
   PLAYER_COUNT_THRESHOLD = 4
   BASE_HAND_SIZE = 7
   SMALL_HAND_SIZE = 5
 
-  def initialize(players = [], deck = Deck.new, current_player_index = 0)
+  def initialize(players = [], deck = Deck.new, current_player = players.first, round_results = [])
     @players = players
-    @current_player = players[current_player_index]
+    @current_player = current_player
     @deck = deck
+    @round_results = round_results
+  end
+
+  def play_round!(requested_rank, target)
+    taken_cards = take_cards(requested_rank, target)
+    round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:)
+  end
+
+  def take_cards(requested_rank, target)
+    cards = target.hand.select { |card| card.rank == requested_rank }
+    unless cards.empty?
+      target.remove_cards(cards)
+      current_player.add_cards(cards)
+      return cards
+    end
+    nil
   end
 
   def self.from_json(json)
@@ -17,15 +33,17 @@ class GoFish
       Player.from_json(player_hash)
     end
     deck = Deck.new(json['deck']['cards'].map do |card_hash|
-      binding.irb if card_hash.instance_of?(String)
       PlayingCard.new(**card_hash.symbolize_keys)
     end)
-    current_player_index = json['current_player_index'] || 0
-    self.new(players, deck, current_player_index)
+    current_player = Player.from_json(json['current_player'])
+    round_results = json['round_results']&.map do |round_results_hash|
+      RoundResult.from_json(round_results_hash)
+    end || []
+    self.new(players, deck, current_player, round_results)
   end
 
   def self.load(json)
-    return nil if json.blank?
+    return nil if json.blank? || json.nil?
     self.from_json(json)
   end
 
@@ -36,13 +54,10 @@ class GoFish
   def as_json(*)
     {
       players: players.map(&:as_json),
-      current_player_index: current_player_index,
-      deck: deck.as_json
+      current_player: current_player.as_json,
+      deck: deck.as_json,
+      round_results: round_results.map(&:as_json)
   }.stringify_keys
-  end
-
-  def current_player_index
-    players.index(current_player)
   end
 
   def deal!

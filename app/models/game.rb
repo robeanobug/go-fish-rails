@@ -15,12 +15,17 @@ class Game < ApplicationRecord
     save!
   end
 
-  # def play_round!
-  #   go_fish.play_round!
-  #   save!
-  # end
+  def play_round!(requested_rank, target_string)
+    target = find_player(target_string)
+    go_fish.play_round!(requested_rank.chop, target)
+    save!
+  end
 
-  def find_player(user)
-    go_fish.players.find { |player| player.user_id == user.id }
+  def find_player(player_info)
+    if player_info.is_a?(User)
+      go_fish.players.find { |player| player.user_id == player_info.id }
+    else
+      go_fish.players.find { |player| player.name == player_info }
+    end
   end
 end

@@ -67,9 +67,10 @@ RSpec.describe "Games", type: :system, js: true do
       load_game_user2
       load_game_user1
       visit game_path(game.id)
+      game.reload
       click_on 'Request'
     end
-    fit 'should show the question' do
+    it 'should show the question' do
       within '.feed__container' do
         expect(page).to have_text(user1.username)
         expect(page).to have_text('asked')
