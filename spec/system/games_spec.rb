@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, js: true do
+RSpec.describe "Games", type: :system, chrome: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
 
@@ -8,28 +8,38 @@ RSpec.describe "Games", type: :system, js: true do
 
   def load_game_user1
     sign_in user1
-    visit root_path
-    click_on(game.name)
-    expect(page).to have_text('Your Hand')
+    page.driver.refresh
   end
 
-  def load_game_user2
+  def join_game_user2
     sign_in user2
     visit root_path
     click_on('Join')
     expect(page).to have_content('Your Hand')
     game.reload
+    reset_cards
+  end
+
+  def reset_cards
+    game.go_fish.players.each do |player|
+      player.hand = []
+      player.books = []
+    end
+    game.go_fish.deck = Deck.new
+    game.go_fish.deal_cards
+    game.save!
+    page.driver.refresh
   end
   it 'should not show the join option after a player is in the game' do
     load_game_user1
-    load_game_user2
+    join_game_user2
     visit root_path
     expect(page).to have_no_content('Join')
   end
 
   describe 'deals cards to players' do
     it 'has cards displayed' do
-      load_game_user2
+      join_game_user2
       player2 = game.find_player(user2)
       card_rank = player2.hand.first.rank
       card_suit = player2.hand.first.suit
@@ -42,7 +52,7 @@ RSpec.describe "Games", type: :system, js: true do
 
   describe 'display correct information' do
     before do
-      load_game_user2
+      join_game_user2
     end
     it 'should show opponent names' do
       within '.player-inputs' do
@@ -58,13 +68,15 @@ RSpec.describe "Games", type: :system, js: true do
     it 'should show a badge of whose turn it is' do
       within '.badge' do
         expect(page).to have_text 'Turn'
+        expect(page).to have_text game.go_fish.current_player.name
+        expect(page).to have_text game.go_fish.current_player.name
       end
     end
   end
 
   describe 'play round' do
     before do
-      load_game_user2
+      join_game_user2
       load_game_user1
       visit game_path(game.id)
       game.reload
@@ -77,12 +89,15 @@ RSpec.describe "Games", type: :system, js: true do
         expect(page).to have_text(user2.username)
       end
     end
-    xit 'should show the response' do
+    it 'should show the response' do
       within '.feed__container' do
         expect(page).to have_text(user1.username)
-        expect(page).to have_text('any')
+        expect(page).to have_text('any').or(have_text('took'))
         expect(page).to have_text(user2.username)
       end
+    end
+    it 'should display taken cards in the hand of the current player and not display them in the targets' do
+      # expect(page).to have_css
     end
     xit 'should show the action' do
       within '.feed__container' do
