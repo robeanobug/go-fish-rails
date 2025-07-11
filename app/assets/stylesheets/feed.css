@@ -1,3 +1,28 @@
+.feed__container {
+  padding: var(--op-space-medium);
+  display: grid;
+  grid-row: 1fr auto;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 65vh;
+}
+
+.feed__output {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  gap: var(--op-space-x-small);
+  overflow: auto;
+}
+
+.feed__response {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--op-space-x-small);
+  padding-inline: var(--op-space-small);
+}
+
 .feed__bubble {
   padding: var(--op-space-small);
   border-radius: var(--op-radius-x-large);

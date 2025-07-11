@@ -1,24 +1,23 @@
-// @import '@rolemodel/optics/dist/scss/optics';
+// @use '@rolemodel/optics/dist/scss/optics';
 // This is a manifest file that'll be compiled into application.css, which will include
 // all the files listed below.
 //
 // For example:
-// @import 'components/modal';
+// @use 'components/modal';
 
 /* Override */
-// @import "./override/accordion.css";
+// @use "./override/accordion";
 
 /* Game Page Content */
 @use "./app-body";
 @use "./card";
-@use "./feed-bubble";
-@use "./feed-input";
-@use "./feed-output";
+@use "./feed";
 @use "./game-board";
 @use "./game-heading";
 @use "./game-page";
 @use "./hand";
 @use "./panel";
 @use "./players-content";
-@use "./playing-cards.css";
+@use "./player-inputs";
+@use "./playing-cards";
 // @use "./game-board.css";
