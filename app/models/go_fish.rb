@@ -29,16 +29,10 @@ class GoFish
   end
 
   def self.from_json(json)
-    players = json['players'].map do |player_hash|
-      Player.from_json(player_hash)
-    end
-    deck = Deck.new(json['deck']['cards'].map do |card_hash|
-      PlayingCard.new(**card_hash.symbolize_keys)
-    end)
+    players = json['players'].map { |player_hash| Player.from_json(player_hash) } 
+    deck = Deck.new(json['deck']['cards'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) })
     current_player = Player.from_json(json['current_player'])
-    round_results = json['round_results']&.map do |round_results_hash|
-      RoundResult.from_json(round_results_hash)
-    end || []
+    round_results = json['round_results']&.map { |round_results_hash| RoundResult.from_json(round_results_hash) }  || []
     self.new(players, deck, current_player, round_results)
   end
 
