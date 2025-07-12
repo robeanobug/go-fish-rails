@@ -1,14 +1,14 @@
 class GoFish
-  attr_accessor :players, :deck, :current_player, :round_results
+  attr_accessor :players, :deck, :current_player_index, :current_player, :round_results
 
   BASE_PLAYER_COUNT = 2
   PLAYER_COUNT_THRESHOLD = 4
   BASE_HAND_SIZE = 7
   SMALL_HAND_SIZE = 5
 
-  def initialize(players = [], deck = Deck.new, current_player = players.first, round_results = [])
+  def initialize(players = [], deck = Deck.new, current_player_index = 0, round_results = [])
     @players = players
-    @current_player = current_player
+    @current_player = players[current_player_index]
     @deck = deck
     @round_results = round_results
   end
@@ -29,15 +29,15 @@ class GoFish
   end
 
   def self.from_json(json)
-    players = json['players'].map { |player_hash| Player.from_json(player_hash) } 
+    players = json['players'].map { |player_hash| Player.from_json(player_hash) }
     deck = Deck.new(json['deck']['cards'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) })
-    current_player = Player.from_json(json['current_player'])
+    current_player_index = json['current_player_index'].to_i
     round_results = json['round_results']&.map { |round_results_hash| RoundResult.from_json(round_results_hash) }  || []
-    self.new(players, deck, current_player, round_results)
+    self.new(players, deck, current_player_index, round_results)
   end
 
   def self.load(json)
-    return nil if json.blank? || json.nil?
+    return nil if json.blank?
     self.from_json(json)
   end
 
@@ -45,13 +45,13 @@ class GoFish
     obj.as_json
   end
 
-  def as_json(*)
+  def as_json
     {
       players: players.map(&:as_json),
-      current_player: current_player.as_json,
+      current_player_index: current_player_index.to_s,
       deck: deck.as_json,
       round_results: round_results.map(&:as_json)
-  }.stringify_keys
+    }.stringify_keys
   end
 
   def deal!

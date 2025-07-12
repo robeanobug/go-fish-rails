@@ -24,16 +24,34 @@ RSpec.describe GoFish do
 
   it "initializes with a deck, players, and current player index" do
     expect(gofish.players).to be_a Array
-    expect(gofish.current_player).to be_a Player
+    expect(gofish.players).to include gofish.current_player
     expect(gofish.deck).to be_a Deck
   end
 
   it 'should create a hash' do
     expect(gofish_hash).to be_a Hash
     expect(gofish_hash).to have_key('players')
-    expect(gofish_hash).to have_key('current_player')
+    expect(gofish_hash).to have_key('current_player_index')
     expect(gofish_hash).to have_key('deck')
     expect(gofish_hash).to have_key('round_results')
+  end
+
+  describe '.from_json' do
+    it 'returns a player with user id, name, hand, and books' do
+      player_hash = { 'user_id' => 1, 'name' => 'Bob', 'hand' => [ { 'rank' => '2', 'suit' => 'Spades' }, { 'rank' => '4', 'suit' => 'Diamonds' } ], 'books' => [] }
+      expect(Player.from_json(player_hash)).to be_a Player
+      expect(Player.from_json(player_hash)).to have_attributes(user_id: 1, name: 'Bob')
+      expect(Player.from_json(player_hash).hand.first).to have_attributes(rank: '2', suit: 'Spades')
+    end
+  end
+
+  describe '#to_json' do
+    it 'returns a hash with proper attributes' do
+      expect(player1.as_json['user_id']).to eq player1.user_id
+      expect(player1.as_json['hand']).to eq []
+      expect(player1.as_json['name']).to eq player1.name
+      expect(player1.as_json['books']).to eq []
+    end
   end
 
   it 'should return object from json' do
@@ -43,7 +61,7 @@ RSpec.describe GoFish do
     game = GoFish.load(GoFish.dump(gofish))
     expect(game.players).to eq [ player1, player2 ]
     expect(game.deck.cards).to eq deck.cards
-    expect(game.current_player).to be_a Player
+    expect(game.players).to include game.current_player
     expect(game.round_results.first.question).to include('asked')
   end
   it 'should deal out the base hand size to 2 players' do

@@ -5,6 +5,16 @@ RSpec.describe "Games", type: :system, chrome: true do
   let!(:user2) { create(:user) }
 
   let!(:game) { create(:game, users: [ user1 ]) }
+  let(:player1) { game.find_player(user1) }
+  let(:player2) { game.find_player(user2) }
+  let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
+  # let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
+  # let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
+  # let(:ace_clubs) { PlayingCard.new(rank: 'Ace', suit: 'Clubs') }
+  # let(:king_spades) { PlayingCard.new(rank: 'King', suit: 'Spades') }
+  # let(:king_hearts) { PlayingCard.new(rank: 'King', suit: 'Hearts') }
+  # let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
+  # let(:king_clubs) { PlayingCard.new(rank: 'King', suit: 'Clubs') }
 
   def load_game_user1
     sign_in user1
@@ -80,9 +90,9 @@ RSpec.describe "Games", type: :system, chrome: true do
       load_game_user1
       visit game_path(game.id)
       game.reload
-      click_on 'Request'
     end
     it 'should show the question' do
+      click_on 'Request'
       within '.feed__container' do
         expect(page).to have_text(user1.username)
         expect(page).to have_text('asked')
@@ -90,21 +100,29 @@ RSpec.describe "Games", type: :system, chrome: true do
       end
     end
     it 'should show the response' do
+      click_on 'Request'
       within '.feed__container' do
         expect(page).to have_text(user1.username)
         expect(page).to have_text('any').or(have_text('took'))
         expect(page).to have_text(user2.username)
       end
     end
-    it 'should display taken cards in the hand of the current player and not display them in the targets' do
-      # expect(page).to have_css
-    end
     xit 'should show the action' do
+      click_on 'Request'
       within '.feed__container' do
         expect(page).to have_text(user1.username)
         expect(page).to have_text('asked')
         expect(page).to have_text(user2.username)
       end
+    end
+    it 'should display taken cards in the hand of the current player and not display them in the targets' do
+      load_game_user1
+
+      expect(page).to have_no_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+      click_on 'Request'
+      expect(page).to have_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+      game.reload
+      expect(player1.hand).to include(ace_spades)
     end
   end
 end

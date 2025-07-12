@@ -23,7 +23,7 @@ main.game-page
       span Your Hand
     .hand
       .playing-cards
-        - if @game.player_count == @game.users.count
+        - if @game.find_player(current_user)
           - @game.find_player(current_user).hand.each do |card|
             = image_tag "#{card.rank}#{card.suit}.svg", alt: "#{card.rank} of #{card.suit}"
   .panel.panel--sub

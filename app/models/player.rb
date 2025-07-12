@@ -15,9 +15,9 @@ class Player
 
   def add_cards(cards)
     if cards.is_a?(PlayingCard)
-      hand << cards
+      self.hand << cards
     else
-      cards.each { |card| hand << card }
+      cards.each { |card| self.hand << card }
     end
   end
 
@@ -37,15 +37,13 @@ class Player
   end
 
   def self.from_json(json)
-    return if json.nil?
-    hand = json['hand']&.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) } || []
-    books = json['books'].map do |book|
-      book.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
-    end
+    # return if json.nil?
+    hand = json['hand'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
+    books = json['books'].map { |book| book.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) } }
     self.new(json['name'], json['user_id'], hand, books)
   end
 
-  def as_json(*)
+  def as_json
     {
       name: name,
       user_id: user_id,

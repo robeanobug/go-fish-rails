@@ -28,18 +28,18 @@ RSpec.describe Player do
     expect(player.user_id).to be_a(Integer)
   end
   it 'adds cards to the hand' do
-    player.add_cards([ace_clubs, ace_diamonds])
-    expect(player.hand).to eq([ace_spades, ace_hearts, ace_clubs, ace_diamonds])
+    player.add_cards([ ace_clubs, ace_diamonds ])
+    expect(player.hand).to eq([ ace_spades, ace_hearts, ace_clubs, ace_diamonds ])
   end
   it 'adds a card to the hand' do
     player.add_cards(ace_diamonds)
     expect(player.hand).to eq([ ace_spades, ace_hearts, ace_diamonds ])
   end
   it 'shows the ranks in their hand' do
-    expect(player.ranks).to eq(['Ace'])
+    expect(player.ranks).to eq([ 'Ace' ])
   end
   it 'removes cards from their hand' do
-    player.remove_cards([ace_spades, ace_hearts])
+    player.remove_cards([ ace_spades, ace_hearts ])
     expect(player.hand).to eq []
   end
   it 'compares players and says they are equal if they have the same information'
