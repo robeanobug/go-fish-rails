@@ -56,7 +56,7 @@ RSpec.describe Game, type: :model do
     deck.cards = [ jack_spades ]
     GoFish.new([ player1, player2 ], deck)
   end
-  it 'inflates and deflates a GoFish game from JSON' do
+  it 'deflates and inflates a GoFish game from JSON' do
     game = GoFish.load(GoFish.dump(setup_game))
     expect(game.players.map(&:name)).to match_array [ user1.username, user2.username ]
     expect(game.players.first.hand.first).to eq PlayingCard.new(suit: 'Clubs', rank: 'Four')
@@ -91,7 +91,6 @@ RSpec.describe Game, type: :model do
       game.find_player(user1).hand = [ ace_spades ]
       game.find_player(user2).hand = [ ace_hearts ]
       game.play_round!('Aces', user2.username)
-      puts game.go_fish.players.map(&:hand).inspect
       expect(game.go_fish.players.last.hand).to eq []
       expect(game.go_fish.players.first.hand).to eq [ ace_spades, ace_hearts ]
     end

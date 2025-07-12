@@ -8,6 +8,7 @@ class GoFish
 
   def initialize(players = [], deck = Deck.new, current_player_index = 0, round_results = [])
     @players = players
+    @current_player_index = current_player_index
     @current_player = players[current_player_index]
     @deck = deck
     @round_results = round_results
@@ -15,7 +16,10 @@ class GoFish
 
   def play_round!(requested_rank, target)
     taken_cards = take_cards(requested_rank, target)
+    fished_card = go_fish unless taken_cards
     round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:)
+    change_turns_if_possible(requested_rank, fished_card)
+    round_results
   end
 
   def take_cards(requested_rank, target)
@@ -26,6 +30,20 @@ class GoFish
       return cards
     end
     nil
+  end
+
+  def go_fish
+    card = deal_card
+    current_player.add_cards(card)
+    card
+  end
+
+  def change_turns_if_possible(requested_rank, fished_card)
+    return if fished_card.nil?
+    unless requested_rank == fished_card.rank
+      self.current_player_index = (players.index(current_player) + 1) % players.count
+      self.current_player = players[current_player_index]
+    end
   end
 
   def self.from_json(json)
@@ -46,7 +64,7 @@ class GoFish
   end
 
   def as_json
-    {
+    hash = {
       players: players.map(&:as_json),
       current_player_index: current_player_index.to_s,
       deck: deck.as_json,

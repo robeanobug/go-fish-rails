@@ -8,6 +8,8 @@ RSpec.describe "Games", type: :system, chrome: true do
   let(:player1) { game.find_player(user1) }
   let(:player2) { game.find_player(user2) }
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
+  let(:two_spades) { PlayingCard.new(rank: 'Two', suit: 'Spades') }
+  let(:jack_hearts) { PlayingCard.new(rank: 'Jack', suit: 'Hearts') }
   # let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   # let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
   # let(:ace_clubs) { PlayingCard.new(rank: 'Ace', suit: 'Clubs') }
@@ -38,6 +40,13 @@ RSpec.describe "Games", type: :system, chrome: true do
     game.go_fish.deck = Deck.new
     game.go_fish.deal_cards
     game.save!
+    page.driver.refresh
+  end
+
+  def assign_hand_to_player1(hand)
+    game.go_fish.players.first.hand = hand
+    game.save!
+    game.reload
     page.driver.refresh
   end
   it 'should not show the join option after a player is in the game' do
@@ -79,7 +88,6 @@ RSpec.describe "Games", type: :system, chrome: true do
       within '.badge' do
         expect(page).to have_text 'Turn'
         expect(page).to have_text game.go_fish.current_player.name
-        expect(page).to have_text game.go_fish.current_player.name
       end
     end
   end
@@ -91,38 +99,60 @@ RSpec.describe "Games", type: :system, chrome: true do
       visit game_path(game.id)
       game.reload
     end
-    it 'should show the question' do
-      click_on 'Request'
-      within '.feed__container' do
-        expect(page).to have_text(user1.username)
-        expect(page).to have_text('asked')
-        expect(page).to have_text(user2.username)
+    context 'when the turn does not change' do
+      it 'should show the question' do
+        click_on 'Request'
+        within '.feed__container' do
+          expect(page).to have_text(user1.username)
+          expect(page).to have_text('asked')
+          expect(page).to have_text(user2.username)
+        end
       end
-    end
-    it 'should show the response' do
-      click_on 'Request'
-      within '.feed__container' do
-        expect(page).to have_text(user1.username)
-        expect(page).to have_text('any').or(have_text('took'))
-        expect(page).to have_text(user2.username)
+      it 'should show the response' do
+        click_on 'Request'
+        within '.feed__container' do
+          expect(page).to have_text(user1.username)
+          expect(page).to have_text('any').or(have_text('took'))
+          expect(page).to have_text(user2.username)
+        end
       end
-    end
-    xit 'should show the action' do
-      click_on 'Request'
-      within '.feed__container' do
-        expect(page).to have_text(user1.username)
-        expect(page).to have_text('asked')
-        expect(page).to have_text(user2.username)
+      xit 'should show the action' do
+        click_on 'Request'
+        within '.feed__container' do
+          expect(page).to have_text(user1.username)
+          expect(page).to have_text('asked')
+          expect(page).to have_text(user2.username)
+        end
       end
-    end
-    it 'should display taken cards in the hand of the current player and not display them in the targets' do
-      load_game_user1
 
-      expect(page).to have_no_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+      it 'should display taken cards correctly for both main players and change turns' do
+        load_game_user1
+
+        expect(page).to have_no_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+        click_on 'Request'
+        expect(page).to have_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+        game.reload
+        expect(player1.hand).to include(ace_spades)
+        within('.badge') { expect(page).to have_text(game.go_fish.players.first.name) }
+      end
+    end
+    it 'should have a player go fish and change turns' do
+      load_game_user1
+      assign_hand_to_player1([ two_spades ])
       click_on 'Request'
-      expect(page).to have_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+      expect(page).to have_css("img[alt='#{jack_hearts.rank} of #{jack_hearts.suit}']")
+      within('.badge') { expect(page).to have_text(game.go_fish.players.last.name) }
+    end
+    xit 'should display messages in the game feed when the player goes fishing' do
+      load_game_user1
+      assign_hand_to_player1([ two_spades ])
+      click_on 'Request'
       game.reload
-      expect(player1.hand).to include(ace_spades)
+      within '.feed__container' do
+        expect(page).to have_text(user1.username)
+        expect(page).to have_text('asked')
+        expect(page).to have_text(user2.username)
+      end
     end
   end
 end

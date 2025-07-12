@@ -80,13 +80,28 @@ RSpec.describe GoFish do
         gofish.deck.cards = [ ace_spades ]
       end
       it 'has a round result with a question' do
-        round_result = gofish.play_round!('Ace', player2).last
+        round_result = gofish.play_round!('Ace', player2)
+        round_result = round_result.last
         expect(round_result.question).to include('asked')
       end
       it 'should take a card from the opponent and give it to the current player' do
         gofish.play_round!('Ace', player2)
         expect(player1.hand).to eq([ ace_hearts, king_diamonds, ace_diamonds ])
         expect(player2.hand).to eq([])
+      end
+    end
+    context "when the current player's turn changes" do
+      before do
+        player1.hand = [ ace_hearts, king_diamonds ]
+        player2.hand = [ ace_diamonds ]
+        gofish.deck.cards = [ ace_spades ]
+      end
+      it 'player1 goes fish and does not pull their requested card' do
+        gofish.play_round!('King', player2)
+        expect(player1.hand).to eq([ ace_hearts, king_diamonds, ace_spades ])
+        expect(player2.hand).to eq([ ace_diamonds ])
+        expect(gofish.current_player_index).to eq 1
+        expect(gofish.current_player).to eq player2
       end
     end
   end
