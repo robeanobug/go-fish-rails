@@ -10,12 +10,12 @@ span
       = result.question
   .feed__response
       i.icon.ph.ph-arrow-bend-down-right
-      .feed__bubble.feed__bubble--sub
+      .feed__bubble.feed__bubble--alert
         span
           = result.response
-  / - unless result.action.nil?
-  /     .feed__response
-  /       i.icon.ph.ph-arrow-bend-down-right
-  /       .feed__bubble.feed__bubble--player-action
-  /         span
-  /           = result.action
+  - if result.action
+    .feed__response
+      i.icon.ph.ph-arrow-bend-down-right
+      .feed__bubble.feed__bubble--sub
+        span
+          = result.action

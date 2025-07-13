@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, chrome: true do
+RSpec.describe "Games", type: :system, js: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
 
@@ -113,6 +113,7 @@ RSpec.describe "Games", type: :system, chrome: true do
         within '.feed__container' do
           expect(page).to have_text(user1.username)
           expect(page).to have_text('any').or(have_text('took'))
+          expect(page).to have_no_text('drew')
           expect(page).to have_text(user2.username)
         end
       end
@@ -136,22 +137,25 @@ RSpec.describe "Games", type: :system, chrome: true do
         within('.badge') { expect(page).to have_text(game.go_fish.players.first.name) }
       end
     end
-    it 'should have a player go fish and change turns' do
-      load_game_user1
-      assign_hand_to_player1([ two_spades ])
-      click_on 'Request'
-      expect(page).to have_css("img[alt='#{jack_hearts.rank} of #{jack_hearts.suit}']")
-      within('.badge') { expect(page).to have_text(game.go_fish.players.last.name) }
-    end
-    xit 'should display messages in the game feed when the player goes fishing' do
-      load_game_user1
-      assign_hand_to_player1([ two_spades ])
-      click_on 'Request'
-      game.reload
-      within '.feed__container' do
-        expect(page).to have_text(user1.username)
-        expect(page).to have_text('asked')
-        expect(page).to have_text(user2.username)
+    context 'when the turn changes' do
+      before do
+        load_game_user1
+        assign_hand_to_player1([ two_spades ])
+        click_on 'Request'
+      end
+      it 'should have a player go fish and change turns' do
+        expect(page).to have_css("img[alt='#{jack_hearts.rank} of #{jack_hearts.suit}']")
+        within('.badge') { expect(page).to have_text(game.go_fish.players.last.name) }
+      end
+      it 'should display messages in the game feed when the player goes fishing' do
+        game.reload
+        within '.feed__container' do
+          expect(page).to have_text(user1.username)
+          expect(page).to have_no_text('took')
+          expect(page).to have_text('Go fish')
+          expect(page).to have_text('drew')
+          expect(page).to have_text(user2.username)
+        end
       end
     end
   end
