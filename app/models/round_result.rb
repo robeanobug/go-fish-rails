@@ -21,7 +21,7 @@ class RoundResult
 
   def action
     return if fished_card.nil?
-    "#{current_player.name} drew a #{fished_card.rank} of #{fished_card.suit}"
+    "#{current_player.name} fished a #{fished_card.rank} of #{fished_card.suit}"
   end
 
   def as_json

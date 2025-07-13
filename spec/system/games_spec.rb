@@ -108,24 +108,23 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_text(user2.username)
         end
       end
-      it 'should show the response' do
+      it 'should show a game response' do
         click_on 'Request'
         within '.feed__container' do
           expect(page).to have_text(user1.username)
           expect(page).to have_text('any').or(have_text('took'))
-          expect(page).to have_no_text('drew')
+          expect(page).to have_no_text('fished')
           expect(page).to have_text(user2.username)
         end
       end
-      xit 'should show the action' do
+      it 'should not show the action' do
         click_on 'Request'
         within '.feed__container' do
           expect(page).to have_text(user1.username)
-          expect(page).to have_text('asked')
+          expect(page).to have_no_text('fished')
           expect(page).to have_text(user2.username)
         end
       end
-
       it 'should display taken cards correctly for both main players and change turns' do
         load_game_user1
 
@@ -136,6 +135,7 @@ RSpec.describe "Games", type: :system, js: true do
         expect(player1.hand).to include(ace_spades)
         within('.badge') { expect(page).to have_text(game.go_fish.players.first.name) }
       end
+      it 'should stay the same turn if the player fishes the requested card'
     end
     context 'when the turn changes' do
       before do
@@ -153,10 +153,14 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_text(user1.username)
           expect(page).to have_no_text('took')
           expect(page).to have_text('Go fish')
-          expect(page).to have_text('drew')
+          expect(page).to have_text('fished')
           expect(page).to have_text(user2.username)
         end
       end
     end
+    context 'when a player creates a book'
+    context 'when a player is out of cards'
+    context 'when the deck is empty'
+    context 'when a player takes the last card from their opponent'
   end
 end
