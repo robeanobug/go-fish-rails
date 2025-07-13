@@ -28,8 +28,8 @@ RSpec.describe Player do
     expect(player.user_id).to be_a(Integer)
   end
   it 'adds cards to the hand' do
-    player.add_cards([ ace_clubs, ace_diamonds ])
-    expect(player.hand).to eq([ ace_spades, ace_hearts, ace_clubs, ace_diamonds ])
+    player.add_cards([ king_clubs, ace_diamonds ])
+    expect(player.hand).to eq([ ace_spades, ace_hearts, king_clubs, ace_diamonds ])
   end
   it 'adds a card to the hand' do
     player.add_cards(ace_diamonds)
@@ -42,7 +42,16 @@ RSpec.describe Player do
     player.remove_cards([ ace_spades, ace_hearts ])
     expect(player.hand).to eq []
   end
-  it 'compares players and says they are equal if they have the same information'
+  it 'compares players and says they are equal if they have the same information' do
+    expect(Player.new('Robyn')).to eq Player.new('Robyn')
+  end
+  it 'creates a book' do
+    player.books = []
+    player.hand = [ ace_spades, ace_hearts, ace_diamonds ]
+    player.add_cards(ace_clubs)
+    expect(player.hand).to eq []
+    expect(player.books).to eq [[ ace_spades, ace_hearts, ace_diamonds, ace_clubs ]]
+  end
   it 'should create a hash' do
     player_hash = player.as_json
     expect(player_hash).to be_a Hash

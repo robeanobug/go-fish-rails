@@ -30,3 +30,7 @@ main.game-page
     .panel__header.panel__header--sub
       span Books
     .hand
+      .playing-cards 
+        - if @game.find_player(current_user)
+          - @game.find_player(current_user).books.each do |book|
+            = image_tag "#{book.first.rank}Spades.svg", alt: "#{book.first.rank}s book"

@@ -19,6 +19,7 @@ class Player
     else
       cards.each { |card| self.hand << card }
     end
+    create_book_if_possible
   end
 
   def remove_cards(cards)
@@ -50,5 +51,22 @@ class Player
       hand: hand.map { |card| { rank: card.rank, suit: card.suit }.stringify_keys },
       books: books.map { |book| book.map { |card| { rank: card.rank, suit: card.suit }.stringify_keys } }
     }.stringify_keys
+  end
+
+  private
+
+  def create_book_if_possible
+    book = find_book
+    if book
+      books << book
+      self.hand -= book
+    end
+  end
+
+  def find_book
+    cards_grouped_by_rank = hand.group_by(&:rank)
+    cards_grouped_by_rank.values.find do |card_group|
+      card_group.length == BOOK_LENGTH
+    end
   end
 end

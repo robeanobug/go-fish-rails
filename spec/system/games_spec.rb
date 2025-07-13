@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, js: true do
+RSpec.describe "Games", type: :system, chrome: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
 
@@ -10,6 +10,7 @@ RSpec.describe "Games", type: :system, js: true do
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:two_spades) { PlayingCard.new(rank: 'Two', suit: 'Spades') }
   let(:jack_hearts) { PlayingCard.new(rank: 'Jack', suit: 'Hearts') }
+  let(:jack_diamonds) { PlayingCard.new(rank: 'Jack', suit: 'Diamonds') }
   # let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   # let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
   # let(:ace_clubs) { PlayingCard.new(rank: 'Ace', suit: 'Clubs') }
@@ -98,6 +99,7 @@ RSpec.describe "Games", type: :system, js: true do
       load_game_user1
       visit game_path(game.id)
       game.reload
+      load_game_user1
     end
     context 'when the turn does not change' do
       it 'should show the question' do
@@ -125,14 +127,20 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_text(user2.username)
         end
       end
-      it 'should display taken cards correctly for both main players and change turns' do
-        load_game_user1
-
-        expect(page).to have_no_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+      it 'should display taken cards correctly for both main players' do
+        # load_game_user1
+        expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
+        select 'Jacks', :from => 'Rank'
         click_on 'Request'
-        expect(page).to have_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+        expect(page).to have_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
         game.reload
-        expect(player1.hand).to include(ace_spades)
+        expect(player1.hand).to include(jack_diamonds)
+      end
+      it 'should keep turn' do
+        # load_game_user1
+        expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
+        select 'Jacks', :from => 'Rank'
+        click_on 'Request'
         within('.badge') { expect(page).to have_text(game.go_fish.players.first.name) }
       end
       it 'should stay the same turn if the player fishes the requested card'
@@ -158,7 +166,25 @@ RSpec.describe "Games", type: :system, js: true do
         end
       end
     end
-    context 'when a player creates a book'
+    context 'when a player creates a book' do
+      before do
+        click_on 'Request'
+      end
+      it 'should remove the cards from the player hand' do
+        within('.panel--sub', text: 'Your Hand') do
+          within('.hand') do
+            expect(page).to have_no_css("img[alt='#{ace_spades.rank} of #{ace_spades.suit}']")
+          end
+        end
+      end
+      it 'should display the book' do
+        within('.panel--sub', text: 'Books') do
+          within('.hand') do
+            expect(page).to have_css("img[alt='#{ace_spades.rank}s book")
+          end
+        end
+      end
+    end
     context 'when a player is out of cards'
     context 'when the deck is empty'
     context 'when a player takes the last card from their opponent'
