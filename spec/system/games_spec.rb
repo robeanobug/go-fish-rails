@@ -8,12 +8,12 @@ RSpec.describe "Games", type: :system, chrome: true do
   let(:player1) { game.find_player(user1) }
   let(:player2) { game.find_player(user2) }
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
+  let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
+  let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
+  let(:ace_clubs) { PlayingCard.new(rank: 'Ace', suit: 'Clubs') }
   let(:two_spades) { PlayingCard.new(rank: 'Two', suit: 'Spades') }
   let(:jack_hearts) { PlayingCard.new(rank: 'Jack', suit: 'Hearts') }
   let(:jack_diamonds) { PlayingCard.new(rank: 'Jack', suit: 'Diamonds') }
-  # let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
-  # let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
-  # let(:ace_clubs) { PlayingCard.new(rank: 'Ace', suit: 'Clubs') }
   # let(:king_spades) { PlayingCard.new(rank: 'King', suit: 'Spades') }
   # let(:king_hearts) { PlayingCard.new(rank: 'King', suit: 'Hearts') }
   # let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
@@ -44,8 +44,8 @@ RSpec.describe "Games", type: :system, chrome: true do
     page.driver.refresh
   end
 
-  def assign_hand_to_player1(hand)
-    game.go_fish.players.first.hand = hand
+  def assign_hand_to_player(player, hand)
+    player.hand = hand
     game.save!
     game.reload
     page.driver.refresh
@@ -128,7 +128,6 @@ RSpec.describe "Games", type: :system, chrome: true do
         end
       end
       it 'should display taken cards correctly for both main players' do
-        # load_game_user1
         expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
         select 'Jacks', :from => 'Rank'
         click_on 'Request'
@@ -137,7 +136,6 @@ RSpec.describe "Games", type: :system, chrome: true do
         expect(player1.hand).to include(jack_diamonds)
       end
       it 'should keep turn' do
-        # load_game_user1
         expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
         select 'Jacks', :from => 'Rank'
         click_on 'Request'
@@ -203,8 +201,17 @@ RSpec.describe "Games", type: :system, chrome: true do
         end
       end
     end
-    context 'when a player is out of cards' do
-      
+    context 'when a player creates a book with their last cards' do
+      fit 'should deal a card to the current player' do
+        assign_hand_to_player(player1, [ ace_spades, ace_hearts, ace_diamonds ])
+        assign_hand_to_player(player2, [ ace_clubs ])
+        click_on 'Request'
+        within('.panel--sub', text: 'Your Hand') do
+          within('.hand') do
+            expect(page).to have_css("img[alt='#{jack_hearts.rank} of #{jack_hearts.suit}']")
+          end
+        end
+      end
     end
     context 'when the deck is empty'
     context 'when a player takes the last card from their opponent'

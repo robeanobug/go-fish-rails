@@ -104,5 +104,17 @@ RSpec.describe GoFish do
         expect(gofish.current_player).to eq player2
       end
     end
+    context 'when a player creates a book with their last cards' do
+      before do
+        player1.hand = [ ace_hearts, ace_diamonds, ace_spades ]
+        player2.hand = [ ace_clubs ]
+        gofish.deck.cards = [ two_spades, king_hearts ]
+      end
+      it 'should deal a card to the current player' do
+        gofish.play_round!('Ace', player2)
+        expect(player1.books).to eq [ [ ace_hearts, ace_diamonds, ace_spades, ace_clubs ] ]
+        expect(player1.hand).to eq [ king_hearts ]
+      end
+    end
   end
 end

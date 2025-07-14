@@ -19,6 +19,7 @@ class GoFish
     fished_card = go_fish unless taken_cards
     round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:, fished_card:)
     change_turns_if_possible(requested_rank, fished_card)
+    draw_card_if_needed
     round_results
   end
 
@@ -103,5 +104,10 @@ class GoFish
 
   def deal_card
     deck.deal_card
+  end
+
+  def draw_card_if_needed
+    return unless current_player.hand.empty?
+    current_player.add_cards(deal_card)
   end
 end
