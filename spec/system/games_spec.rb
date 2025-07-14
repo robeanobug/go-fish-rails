@@ -288,9 +288,10 @@ RSpec.describe "Games", type: :system, chrome: true do
       game.reload
       load_game_user(user2)
     end
-    xit 'automatically reloads page with action cable' do
-      create game_rounds_path[:game_id], params: { requested_rank: 'Ace', target: player2 }
-      page.driver.refresh
+    fit 'automatically reloads page with action cable' do
+      game.play_round!('Ace', user2.username)
+      # page.driver.refresh
+      binding.irb
     end
   end
 end

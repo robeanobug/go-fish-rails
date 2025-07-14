@@ -1,6 +1,7 @@
 import consumer from "./consumer"
+import { Controller } from "@hotwired/stimulus"
 
-consumer.subscriptions.create({channel: "GameChannel"}, {
+consumer.subscriptions.create({channel: "GameChannel", id: document.getElementById('game_id').dataset.id}, {
   connected() {
     console.log('Connected to Actioncable')
   },
