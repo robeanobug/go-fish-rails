@@ -129,7 +129,7 @@ RSpec.describe "Games", type: :system, chrome: true do
       end
       it 'should display taken cards correctly for both main players' do
         expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
-        select 'Jacks', :from => 'Rank'
+        select 'Jacks', from: 'Rank'
         click_on 'Request'
         expect(page).to have_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
         game.reload
@@ -137,7 +137,7 @@ RSpec.describe "Games", type: :system, chrome: true do
       end
       it 'should keep turn' do
         expect(page).to have_no_css("img[alt='#{jack_diamonds.rank} of #{jack_diamonds.suit}']")
-        select 'Jacks', :from => 'Rank'
+        select 'Jacks', from: 'Rank'
         click_on 'Request'
         within('.badge') { expect(page).to have_text(game.go_fish.players.first.name) }
       end
@@ -146,7 +146,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     context 'when the turn changes' do
       before do
         load_game_user1
-        assign_hand_to_player1([ two_spades ])
+        assign_hand_to_player(player1, [ two_spades ])
         click_on 'Request'
       end
       it 'should have a player go fish and change turns' do
@@ -193,7 +193,7 @@ RSpec.describe "Games", type: :system, chrome: true do
           expect(page).to have_button('Request', disabled: true)
         end
       end
-      fit 'should not let the current player play' do
+      it 'should not let the current player play' do
         within('.player-inputs') do
           expect(page).to have_field('Player', disabled: false)
           expect(page).to have_field('Rank', disabled: false)
@@ -202,7 +202,7 @@ RSpec.describe "Games", type: :system, chrome: true do
       end
     end
     context 'when a player creates a book with their last cards' do
-      fit 'should deal a card to the current player' do
+      it 'should deal a card to the current player' do
         assign_hand_to_player(player1, [ ace_spades, ace_hearts, ace_diamonds ])
         assign_hand_to_player(player2, [ ace_clubs ])
         click_on 'Request'
