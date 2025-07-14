@@ -9,30 +9,31 @@ RSpec.describe RoundResult do
   let(:fished_two) { PlayingCard.new(rank: 'Two', suit: 'Clubs') }
 
   context 'when current player takes a card from target player' do
-    let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', taken_cards:) }
+    let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', taken_cards: taken_cards) }
     it 'has a question' do
-      expect(result.question).to include('asked', 'for')
+      expect(result.question(player1)).to include('asked', 'for')
     end
     it 'has a response' do
-      expect(result.response).to include('took', 'from')
+      expect(result.response(player1)).to include('took', 'from')
     end
   end
-  xcontext 'when current player goes fish' do
+  context 'when current player goes fish' do
+    let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', fished_card: fished_ace) }
     it 'has a question' do
-      expect(result.question).to include('asked', 'for')
+      expect(result.question(player1)).to include('asked', 'for')
     end
     it 'has a response' do
-      expect(result.response).to include('Go fish')
+      expect(result.response(player1)).to include('Go fish')
     end
     it 'has an action' do
-      expect(result.action).to include('drew')
+      expect(result.action(player1)).to include('fished', fished_ace.rank)
     end
   end
 
   context 'when there is a winner' do
     let(:result) { RoundResult.new(winner: player1) }
     it 'should display a winner' do
-      expect(result.winner_output).to include('winner')
+      expect(result.winner_output(player1)).to include('winner')
     end
   end
 

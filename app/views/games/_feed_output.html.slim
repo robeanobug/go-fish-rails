@@ -3,19 +3,19 @@ span
   - if result.winner
       div class="feed__bubble feed__bubble--main"
         span 
-            = result.winner_output
+            = result.winner_output(@game.find_player(current_user))
       - next
   .feed__bubble.feed__bubble--main
     span
-      = result.question
+      = result.question(@game.find_player(current_user))
   .feed__response
       i.icon.ph.ph-arrow-bend-down-right
       .feed__bubble.feed__bubble--alert
         span
-          = result.response
-  - if result.action
+          = result.response(@game.find_player(current_user))
+  - if result.fished_card
     .feed__response
       i.icon.ph.ph-arrow-bend-down-right
       .feed__bubble.feed__bubble--sub
         span
-          = result.action
+          = result.action(@game.find_player(current_user))

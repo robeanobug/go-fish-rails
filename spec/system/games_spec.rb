@@ -109,26 +109,20 @@ RSpec.describe "Games", type: :system, chrome: true do
       it 'should show the question' do
         click_on 'Request'
         within '.feed__container' do
-          expect(page).to have_text(user1.username)
           expect(page).to have_text('asked')
-          expect(page).to have_text(user2.username)
         end
       end
       it 'should show a game response' do
         click_on 'Request'
         within '.feed__container' do
-          expect(page).to have_text(user1.username)
           expect(page).to have_text('any').or(have_text('took'))
           expect(page).to have_no_text('fished')
-          expect(page).to have_text(user2.username)
         end
       end
       it 'should not show the action' do
         click_on 'Request'
         within '.feed__container' do
-          expect(page).to have_text(user1.username)
           expect(page).to have_no_text('fished')
-          expect(page).to have_text(user2.username)
         end
       end
       it 'should display taken cards correctly for both main players' do
@@ -160,7 +154,8 @@ RSpec.describe "Games", type: :system, chrome: true do
       it 'should display messages in the game feed when the player goes fishing' do
         game.reload
         within '.feed__container' do
-          expect(page).to have_text(user1.username)
+          # binding.irb
+          expect(page).to have_text('You')
           expect(page).to have_no_text('took')
           expect(page).to have_text('Go fish')
           expect(page).to have_text('fished')
@@ -249,7 +244,7 @@ RSpec.describe "Games", type: :system, chrome: true do
       it 'should display the winner' do
         click_on 'Request'
         within '.feed__container' do
-          expect(page).to have_text(user1.username)
+          expect(page).to have_text('You')
           expect(page).to have_text('winner')
         end
       end

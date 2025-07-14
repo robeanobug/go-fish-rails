@@ -62,7 +62,7 @@ RSpec.describe GoFish do
     expect(game.players).to eq [ player1, player2 ]
     expect(game.deck.cards).to eq deck.cards
     expect(game.players).to include game.current_player
-    expect(game.round_results.first.question).to include('asked')
+    expect(game.round_results.first.question(player1)).to include('asked')
   end
   it 'should deal out the base hand size to 2 players' do
     gofish.deal!
@@ -82,7 +82,7 @@ RSpec.describe GoFish do
       it 'has a round result with a question' do
         round_result = gofish.play_round!('Ace', player2)
         round_result = round_result.last
-        expect(round_result.question).to include('asked')
+        expect(round_result.question(player1)).to include('asked')
       end
       it 'should take a card from the opponent and give it to the current player' do
         gofish.play_round!('Ace', player2)
@@ -125,12 +125,12 @@ RSpec.describe GoFish do
       end
       it 'should display the winner' do
         result = gofish.play_round!('Ace', player2)
-        expect(result.last.winner_output).to include("winner", player1.name)
+        expect(result.last.winner_output(player2)).to include("winner", player1.name)
       end
       it 'should not display the winner' do
         gofish.deck.cards = [ king_spades ]
         result = gofish.play_round!('Ace', player2)
-        expect(result.last.winner_output).to be nil
+        expect(result.last.winner_output(player1)).to be nil
       end
     end
   end
