@@ -16,7 +16,7 @@ class GoFish
 
   def play_round!(requested_rank, target)
     taken_cards = take_cards(requested_rank, target)
-    fished_card = go_fish unless taken_cards
+    fished_card = go_fish unless taken_cards || deck.empty?
     round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:, fished_card:)
     change_turns_if_possible(requested_rank, fished_card)
     draw_card_if_needed

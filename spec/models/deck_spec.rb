@@ -17,4 +17,8 @@ RSpec.describe Deck do
     expect(unshuffled_deck).to match_array deck.cards
     expect(unshuffled_deck).to_not eq deck.cards
   end
+  it 'should return true if empty' do
+    deck.cards = []
+    expect(deck.empty?).to be true
+  end
 end

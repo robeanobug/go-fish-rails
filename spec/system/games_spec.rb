@@ -3,10 +3,12 @@ require 'rails_helper'
 RSpec.describe "Games", type: :system, chrome: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
+  let!(:user3) { create(:user) }
 
   let!(:game) { create(:game, users: [ user1 ]) }
   let(:player1) { game.find_player(user1) }
   let(:player2) { game.find_player(user2) }
+  let(:player3) { game.find_player(user3) }
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
@@ -19,13 +21,13 @@ RSpec.describe "Games", type: :system, chrome: true do
   # let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
   # let(:king_clubs) { PlayingCard.new(rank: 'King', suit: 'Clubs') }
 
-  def load_game_user1
-    sign_in user1
+  def load_game_user(user)
+    sign_in user
     page.driver.refresh
   end
 
-  def join_game_user2
-    sign_in user2
+  def join_game_user(user)
+    sign_in user
     visit root_path
     click_on('Join')
     expect(page).to have_content('Your Hand')
@@ -51,28 +53,28 @@ RSpec.describe "Games", type: :system, chrome: true do
     page.driver.refresh
   end
   it 'should not show the join option after a player is in the game' do
-    load_game_user1
-    join_game_user2
+    load_game_user(user1)
+    join_game_user(user2)
     visit root_path
     expect(page).to have_no_content('Join')
   end
 
   describe 'deals cards to players' do
     it 'has cards displayed' do
-      join_game_user2
+      join_game_user(user2)
       player2 = game.find_player(user2)
       card_rank = player2.hand.first.rank
       card_suit = player2.hand.first.suit
 
       expect(page).to have_css("img[alt='#{card_rank} of #{card_suit}']")
-      load_game_user1
+      load_game_user(user1)
       expect(page).to have_no_css("img[alt='#{card_rank} of #{card_suit}']")
     end
   end
 
   describe 'display correct information' do
     before do
-      join_game_user2
+      join_game_user(user2)
     end
     it 'should show opponent names' do
       within '.player-inputs' do
@@ -95,11 +97,11 @@ RSpec.describe "Games", type: :system, chrome: true do
 
   describe 'play round' do
     before do
-      join_game_user2
-      load_game_user1
+      join_game_user(user2)
+      load_game_user(user1)
       visit game_path(game.id)
       game.reload
-      load_game_user1
+      load_game_user(user1)
     end
     context 'when the turn does not change' do
       it 'should show the question' do
@@ -145,7 +147,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     end
     context 'when the turn changes' do
       before do
-        load_game_user1
+        load_game_user(user1)
         assign_hand_to_player(player1, [ two_spades ])
         click_on 'Request'
       end
@@ -213,7 +215,24 @@ RSpec.describe "Games", type: :system, chrome: true do
         end
       end
     end
-    context 'when the deck is empty'
+    context 'when a player tries to draw a card and the deck is empty' do
+      it 'should not draw a card if the player tries to go fish' do
+        assign_hand_to_player(player1, [ ace_spades ])
+        assign_hand_to_player(player2, [])
+        game.go_fish.deck.cards = []
+        game.save!
+        click_on 'Request'
+        expect(player1.hand).to eq [ ace_spades ]
+      end
+      xit 'should skip the player if the player runs out of cards' do
+        assign_hand_to_player(player1, [ ace_spades ])
+        assign_hand_to_player(player2, [])
+        game.go_fish.deck.cards = []
+        game.save!
+        click_on 'Request'
+
+      end
+    end
     context 'when a player takes the last card from their opponent'
   end
 end

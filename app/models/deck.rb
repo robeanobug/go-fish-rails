@@ -20,4 +20,8 @@ class Deck
   def shuffle!
     cards.shuffle!
   end
+
+  def empty?
+    cards.empty?
+  end
 end
