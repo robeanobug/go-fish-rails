@@ -29,6 +29,13 @@ RSpec.describe RoundResult do
     end
   end
 
+  context 'when there is a winner' do
+    let(:result) { RoundResult.new(winner: player1) }
+    it 'should display a winner' do
+      expect(result.winner_output).to include('winner')
+    end
+  end
+
   describe 'serialization' do
     let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', taken_cards:) }
     it 'should create a hash' do

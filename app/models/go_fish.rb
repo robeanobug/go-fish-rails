@@ -18,6 +18,7 @@ class GoFish
     taken_cards = take_cards(requested_rank, target)
     fished_card = go_fish unless taken_cards || deck.empty?
     round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:, fished_card:)
+    round_results << RoundResult.new(winner: find_winner) if over?
     change_turns_if_possible(requested_rank, fished_card)
     draw_card_if_needed
     round_results
@@ -65,7 +66,7 @@ class GoFish
   end
 
   def as_json
-    hash = {
+    {
       players: players.map(&:as_json),
       current_player_index: current_player_index.to_s,
       deck: deck.as_json,
@@ -107,7 +108,15 @@ class GoFish
   end
 
   def draw_card_if_needed
-    return unless current_player.hand.empty?
+    return if !current_player.hand.empty? || deck.empty?
     current_player.add_cards(deal_card)
+  end
+
+  def find_winner
+    players.max { |player| player.books.count }
+  end
+
+  def over?
+    deck.empty? && players.all? { |player| player.out_of_cards? }
   end
 end

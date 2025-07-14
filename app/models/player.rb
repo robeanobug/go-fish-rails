@@ -30,6 +30,10 @@ class Player
     hand.map(&:rank).uniq
   end
 
+  def out_of_cards?
+    hand.empty?
+  end
+
   def ==(other_player)
     name == other_player.name &&
     user_id == other_player.user_id &&
@@ -38,7 +42,6 @@ class Player
   end
 
   def self.from_json(json)
-    # return if json.nil?
     hand = json['hand'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) }
     books = json['books'].map { |book| book.map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) } }
     self.new(json['name'], json['user_id'], hand, books)

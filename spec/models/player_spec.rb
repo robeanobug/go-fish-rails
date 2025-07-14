@@ -52,6 +52,14 @@ RSpec.describe Player do
     expect(player.hand).to eq []
     expect(player.books).to eq [[ ace_spades, ace_hearts, ace_diamonds, ace_clubs ]]
   end
+  it 'should return true if player is out of cards' do
+    player.hand = []
+    expect(player.out_of_cards?).to be true
+  end
+  it 'should return false if player has cards' do
+    player.hand = [ ace_clubs ]
+    expect(player.out_of_cards?).to be false
+  end
   it 'should create a hash' do
     player_hash = player.as_json
     expect(player_hash).to be_a Hash

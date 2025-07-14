@@ -6,6 +6,7 @@ RSpec.describe "Games", type: :system, chrome: true do
   let!(:user3) { create(:user) }
 
   let!(:game) { create(:game, users: [ user1 ]) }
+  let!(:game_three_players) { create(:game, player_count: 3, users: [ user1, user2, user3 ]) }
   let(:player1) { game.find_player(user1) }
   let(:player2) { game.find_player(user2) }
   let(:player3) { game.find_player(user3) }
@@ -30,6 +31,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     sign_in user
     visit root_path
     click_on('Join')
+    # binding.irb
     expect(page).to have_content('Your Hand')
     game.reload
     reset_cards
@@ -95,7 +97,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     end
   end
 
-  describe 'play round' do
+  describe 'play round two players' do
     before do
       join_game_user(user2)
       load_game_user(user1)
@@ -230,9 +232,34 @@ RSpec.describe "Games", type: :system, chrome: true do
         game.go_fish.deck.cards = []
         game.save!
         click_on 'Request'
-
       end
     end
-    context 'when a player takes the last card from their opponent'
+    context 'when a player takes the last cards from their opponent'
+    context 'when all the cards are in books'
+
+    context 'when all the cards are in books' do
+      before do
+        game.go_fish.players.each { |player| player.books = [] }
+        player1.hand = [ace_diamonds, ace_spades]
+        player2.hand = [ace_hearts, ace_clubs]
+        game.go_fish.deck.cards = []
+        game.save!
+        page.driver.refresh
+      end
+      it 'should display the winner' do
+        click_on 'Request'
+        within '.feed__container' do
+          expect(page).to have_text(user1.username)
+          expect(page).to have_text('winner')
+        end
+      end
+    end
+  end
+  xdescribe 'play round three players' do
+    before do
+      load_game_user()
+      sign_in user
+      page.driver.refresh
+    end
   end
 end

@@ -116,5 +116,22 @@ RSpec.describe GoFish do
         expect(player1.hand).to eq [ king_hearts ]
       end
     end
+    context 'when the game is over' do
+      before do
+        gofish.players.each { |player| player.books = [] }
+        gofish.deck.cards = []
+        player1.hand = [ace_diamonds, ace_spades]
+        player2.hand = [ace_hearts, ace_clubs]
+      end
+      it 'should display the winner' do
+        result = gofish.play_round!('Ace', player2)
+        expect(result.last.winner_output).to include("winner", player1.name)
+      end
+      it 'should not display the winner' do
+        gofish.deck.cards = [ king_spades ]
+        result = gofish.play_round!('Ace', player2)
+        expect(result.last.winner_output).to be nil
+      end
+    end
   end
 end
