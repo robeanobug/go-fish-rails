@@ -1,15 +1,35 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("GameChannel", {
+consumer.subscriptions.create({channel: "GameChannel"}, {
   connected() {
-    // Called when the subscription is ready for use on the server
+    console.log('Connected to Actioncable')
   },
 
   disconnected() {
-    // Called when the subscription has been terminated by the server
+    console.log('Disconnected from Actioncable')
   },
 
   received(data) {
-    // Called when there's incoming data on the websocket for this channel
+    window.location.reload()
   }
 });
+
+// export default class extends Controller {
+//   static targets = ["game"];
+//   connect() {
+//     this.subscription = consumer.subscriptions.create({
+//       channel: "GameChannel",
+//       id: this.data.get("id"),
+//     },
+//     {
+//       connected: this._connected.bind(this),
+//       disconnected: this._disconnected.bind(this),
+//       received: this._received.bind(this),
+//     });
+//   }
+//   _connected() {}
+//   _disconnected() {}
+//   _received(data) {
+//     window.location.reload()
+//   }
+// }

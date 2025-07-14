@@ -4,6 +4,8 @@ class RoundsController < ApplicationController
   def create
     @game = Game.find(params[:game_id])
     if @game.play_round!(round_params[:requested_rank], round_params[:target])
+      ActionCable.server.broadcast('game_channel', 'round_played')
+
       redirect_to @game, notice: 'Round played successfully!'
     else
       redirect_to @game, unprocessable_entity
