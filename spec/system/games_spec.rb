@@ -185,6 +185,19 @@ RSpec.describe "Games", type: :system, chrome: true do
         end
       end
     end
+    context 'when a player tries to play out of turn' do
+      before do
+        sign_in user2
+        page.driver.refresh
+      end
+      it 'should not let them play' do
+        within('.player-inputs') do
+          expect(page).to have_field('Player', disabled: true)
+          expect(page).to have_field('Rank', disabled: true)
+          expect(page).to have_button('Request', disabled: true)
+        end
+      end
+    end
     context 'when a player is out of cards'
     context 'when the deck is empty'
     context 'when a player takes the last card from their opponent'

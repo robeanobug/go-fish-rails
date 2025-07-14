@@ -31,4 +31,8 @@ class Game < ApplicationRecord
       go_fish.players.find { |player| player.name == player_info }
     end
   end
+
+  def is_current_player_turn?(current_user)
+    find_player(current_user) == go_fish.current_player
+  end
 end

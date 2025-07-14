@@ -95,4 +95,9 @@ RSpec.describe Game, type: :model do
       expect(game.go_fish.players.first.hand).to eq [ ace_spades, ace_hearts ]
     end
   end
+  it 'returns true if it is the current players turn' do
+    game.start_if_ready!
+    expect(game.is_current_player_turn?(user1)).to be true
+    expect(game.is_current_player_turn?(user2)).to be false
+  end
 end
