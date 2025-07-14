@@ -1,0 +1,28 @@
+- if @game.go_fish
+  - @game.go_fish.players.each do |player|
+    - next if player == @game.find_player(current_user)
+    details class="accordion accordion--player"
+      summary
+        .accordion__label
+          div
+            .accordion__data-summary.accordion__data-summary--heading
+              span class="material-symbols-outlined icon accordion__marker" arrow_right
+              span = player.name
+          .accordion__data-summary
+            span Cards:
+            strong
+              div = player.hand.length
+            span Books: 
+            strong
+              div = player.books.length
+      .accordion__content
+        .playing-cards
+          - player.hand.count.times do
+            = image_tag "CardBack.svg", alt: "Flipped card"
+        .playing-cards 
+          - player.books.each do |book|
+            = image_tag "#{book.first.rank}Spades.svg", alt: "#{book.first.rank}s book"
+- else
+  ul
+    - @game.users do |user|
+      li = "Hello, #{user.username}! Waiting for more players..."

@@ -6,6 +6,8 @@ main.game-page
         = @game.name
     .players-content 
       .player-deck-content 
+        span.game__heading.game__heading--players Players:
+        = render 'accordion'
   .panel.panel--side
     .panel__header.panel__header--alt
       span.game__heading Game Feed

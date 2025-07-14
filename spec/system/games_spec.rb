@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, chrome: true do
+RSpec.describe "Games", type: :system, js: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
   let!(:user3) { create(:user) }
@@ -116,13 +116,15 @@ RSpec.describe "Games", type: :system, chrome: true do
         click_on 'Request'
         within '.feed__container' do
           expect(page).to have_text('any').or(have_text('took'))
-          expect(page).to have_no_text('fished')
         end
       end
       it 'should not show the action' do
         click_on 'Request'
+        click_on 'Request'
         within '.feed__container' do
+          expect(page).to have_text('You asked')
           expect(page).to have_no_text('fished')
+          expect(page).to have_no_text(player1.name)
         end
       end
       it 'should display taken cards correctly for both main players' do
@@ -246,6 +248,33 @@ RSpec.describe "Games", type: :system, chrome: true do
           expect(page).to have_text('You')
           expect(page).to have_text('winner')
         end
+      end
+    end
+  end
+  context 'should display the opponent player accordion' do
+    before do
+      join_game_user(user2)
+      load_game_user(user1)
+      visit game_path(game.id)
+      game.reload
+      load_game_user(user1)
+    end
+    it 'has an accordion' do
+      expect(page).to have_css(".accordion")
+    end
+    it 'shows the player name' do
+      current_player_name = player1.name
+      opponent_name = player2.name
+      within ".players-content" do
+        expect(page).to have_content(opponent_name)
+        expect(page).to have_no_content(current_player_name)
+      end
+    end
+    it 'shows the player card count and books count' do
+      opponent = player2
+      within ".players-content" do
+        expect(page).to have_content(opponent.hand.count)
+        expect(page).to have_content(opponent.books.count)
       end
     end
   end
