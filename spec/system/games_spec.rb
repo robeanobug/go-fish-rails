@@ -154,7 +154,6 @@ RSpec.describe "Games", type: :system, chrome: true do
       it 'should display messages in the game feed when the player goes fishing' do
         game.reload
         within '.feed__container' do
-          # binding.irb
           expect(page).to have_text('You')
           expect(page).to have_no_text('took')
           expect(page).to have_text('Go fish')

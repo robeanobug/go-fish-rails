@@ -11,22 +11,28 @@ RSpec.describe RoundResult do
   context 'when current player takes a card from target player' do
     let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', taken_cards: taken_cards) }
     it 'has a question' do
-      expect(result.question(player1)).to include('asked', 'for')
+      expect(result.question(player1)).to include('You', 'asked', 'for')
+      expect(result.question(player2)).to include(player1.name, 'asked', 'for', 'you')
     end
     it 'has a response' do
-      expect(result.response(player1)).to include('took', 'from')
+      expect(result.response(player1)).to include('You', 'took', 'from')
+      expect(result.response(player2)).to include(player1.name, 'took', 'from', 'you')
     end
   end
   context 'when current player goes fish' do
     let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', fished_card: fished_ace) }
+
     it 'has a question' do
       expect(result.question(player1)).to include('asked', 'for')
     end
     it 'has a response' do
       expect(result.response(player1)).to include('Go fish')
+      expect(result.response(player2)).to include('Go fish')
     end
     it 'has an action' do
       expect(result.action(player1)).to include('fished', fished_ace.rank)
+      expect(result.action(player2)).to include('fished', 'card')
+      expect(result.action(player2)).to_not include(fished_ace.rank)
     end
   end
 

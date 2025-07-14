@@ -12,17 +12,18 @@ class RoundResult
 
   def question(player)
     # binding.irb
-    "#{subject(player)} asked #{target.name} for #{requested_rank}s"
+    "#{subject(player)} asked #{recipient(player)} for #{requested_rank}s"
   end
 
   def response(player)
-    return "#{subject(player)} took #{taken_cards.count} #{requested_rank}(s) from #{target.name}" unless fished_card
-    "Go fish: #{target.name} does not have any #{requested_rank}s"
+    return "#{subject(player)} took #{taken_cards.count} #{requested_rank}(s) from #{recipient(player)}" unless fished_card
+    "Go fish: #{recipient(player)} does not have any #{requested_rank}s"
   end
 
   def action(player)
     return if fished_card.nil?
-    "#{subject(player)} fished a #{fished_card.rank} of #{fished_card.suit}"
+    return "#{subject(player)} fished a #{fished_card.rank} of #{fished_card.suit}" if subject(player) == 'You'
+    "#{subject(player)} fished a card"
   end
 
   def winner_output(player)
@@ -32,6 +33,10 @@ class RoundResult
   def subject(player)
     return player == current_player ? 'You' : current_player.name if current_player
     player == winner ? 'You are' : "#{winner.name} is" if winner
+  end
+
+  def recipient(player)
+    player == target ? 'you' : target.name
   end
 
   def as_json
