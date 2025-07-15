@@ -45,7 +45,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     game.go_fish.deck = Deck.new
     game.go_fish.deal_cards
     game.save!
-    page.driver.refresh
+    visit game_path(game)
   end
 
   def assign_hand_to_player(player, hand)
@@ -240,7 +240,7 @@ RSpec.describe "Games", type: :system, chrome: true do
         player2.hand = [ace_hearts, ace_clubs]
         game.go_fish.deck.cards = []
         game.save!
-        page.driver.refresh
+        visit game_path(game)
       end
       it 'should display the winner' do
         click_on 'Request'
@@ -250,6 +250,7 @@ RSpec.describe "Games", type: :system, chrome: true do
         end
       end
     end
+
     fit 'updates both users games automatically with turbo streams' do
       load_game_user(user2)
       game.play_round!('Aces', player2.name)
