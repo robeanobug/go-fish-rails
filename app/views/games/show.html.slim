@@ -1,2 +1,2 @@
-= turbo_stream_from "games:#{@game.id}:users:#{current_user.id}"
+= turbo_stream_from @game
 = render partial: 'game', locals: { user: current_user, game: @game }

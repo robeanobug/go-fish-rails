@@ -3,7 +3,9 @@ class Game < ApplicationRecord
   has_many :game_users, dependent: :destroy
   has_many :users, through: :game_users
 
-  after_update -> { update_streams }
+  # after_update -> { update_streams }
+
+  broadcasts_refreshes
 
   validates :name, presence: true
   validates :player_count, numericality: { greater_than: 1, less_than_or_equal_to: 6 }
@@ -24,16 +26,6 @@ class Game < ApplicationRecord
     fish.play_round!(requested_rank.chop, target)
     self.go_fish = fish
     save!
-  end
-
-  def update_streams
-    users.each do |user|
-      Turbo::StreamsChannel.broadcast_update_to(
-        turbo_stream_id(user), # matches turbo_stream_from channel
-        target: dom_id(self, user.id), # matches turbo_frame id
-        partial: 'games/game', locals: { game: self, user: user }
-      )
-    end
   end
 
   def find_player(player_info)

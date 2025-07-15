@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Games", type: :system, chrome: true do
+  include ActiveJob::TestHelper
+
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
   let!(:user3) { create(:user) }
@@ -251,7 +253,7 @@ RSpec.describe "Games", type: :system, chrome: true do
       end
     end
 
-    fit 'updates both users games automatically with turbo streams' do
+    it 'updates both users games automatically with turbo streams' do
       load_game_user(user2)
       game.play_round!('Aces', player2.name)
       # binding.irb
@@ -293,6 +295,12 @@ RSpec.describe "Games", type: :system, chrome: true do
       load_game_user()
       sign_in user
       page.driver.refresh
+    end
+  end
+
+  fit 'should sort the cards' do
+    perform_enqueued_jobs do
+      your test content and expectations
     end
   end
 end
