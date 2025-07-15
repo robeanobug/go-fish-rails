@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, chrome: true do
+RSpec.describe "Games", type: :system, js: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
   let!(:user3) { create(:user) }
 
   let!(:game) { create(:game, users: [ user1 ]) }
-  # let!(:game_three_players) { create(:game, player_count: 3, users: [ user1, user2, user3 ]) }
+  let!(:game_three_players) { create(:game, player_count: 3, users: [ user1, user2, user3 ]) }
   let(:player1) { game.find_player(user1) }
   let(:player2) { game.find_player(user2) }
   let(:player3) { game.find_player(user3) }
@@ -17,6 +17,10 @@ RSpec.describe "Games", type: :system, chrome: true do
   let(:two_spades) { PlayingCard.new(rank: 'Two', suit: 'Spades') }
   let(:jack_hearts) { PlayingCard.new(rank: 'Jack', suit: 'Hearts') }
   let(:jack_diamonds) { PlayingCard.new(rank: 'Jack', suit: 'Diamonds') }
+  # let(:king_spades) { PlayingCard.new(rank: 'King', suit: 'Spades') }
+  # let(:king_hearts) { PlayingCard.new(rank: 'King', suit: 'Hearts') }
+  # let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
+  # let(:king_clubs) { PlayingCard.new(rank: 'King', suit: 'Clubs') }
 
   def load_game_user(user)
     sign_in user
@@ -27,6 +31,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     sign_in user
     visit root_path
     click_on('Join')
+    # binding.irb
     expect(page).to have_content('Your Hand')
     game.reload
     reset_cards
@@ -278,20 +283,6 @@ RSpec.describe "Games", type: :system, chrome: true do
       load_game_user()
       sign_in user
       page.driver.refresh
-    end
-  end
-  context 'action cable' do
-    before do
-      join_game_user(user2)
-      load_game_user(user1)
-      visit game_path(game.id)
-      game.reload
-      load_game_user(user2)
-    end
-    fit 'automatically reloads page with action cable' do
-      game.play_round!('Ace', user2.username)
-      page.driver.refresh
-      binding.irb
     end
   end
 end

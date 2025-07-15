@@ -4,10 +4,6 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   allow_browser versions: :modern
 
-  def encripted_cookie
-    cookies[:user_id] = :current_user.id
-  end
-
   protected
 
   def configure_permitted_parameters

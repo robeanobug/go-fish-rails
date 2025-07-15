@@ -29,6 +29,15 @@ class RoundResult
     "#{subject(player)} the winner!" if winner
   end
 
+  def subject(player)
+    return player.name == current_player.name ? 'You' : current_player.name if current_player
+    player.name == winner.name ? 'You are' : "#{winner.name} is" if winner
+  end
+
+  def recipient(player)
+    player.name == target.name ? 'you' : target.name
+  end
+
   def as_json
     {
       current_player: current_player.as_json,
@@ -48,16 +57,5 @@ class RoundResult
     fished_card = json['fished_card'] ? PlayingCard.new(**json['fished_card'].symbolize_keys) : nil
     winner = json['winner'] ? Player.from_json(json['winner']) : nil
     self.new(current_player:, target:, requested_rank:, taken_cards:, fished_card:, winner:)
-  end
-
-  private
-
-  def subject(player)
-    return player.name == current_player.name ? 'You' : current_player.name if current_player
-    player.name == winner.name ? 'You are' : "#{winner.name} is" if winner
-  end
-
-  def recipient(player)
-    player.name == target.name ? 'you' : target.name
   end
 end
