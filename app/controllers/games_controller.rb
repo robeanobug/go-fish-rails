@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy]
+  before_action :set_game, only: [ :show, :edit, :update, :destroy ]
   def index
     @games = Game.all
   end
@@ -16,7 +16,7 @@ class GamesController < ApplicationController
     @game.users << current_user
 
     if @game.save
-      redirect_to games_path, notice: "Game was successfully created."
+      redirect_to games_path, notice: 'Game was successfully created.'
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class GamesController < ApplicationController
 
   def update
     if @game.update(game_params)
-      redirect_to games_path, notice: "Game was successfully updated."
+      redirect_to games_path, notice: 'Game was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy
-    redirect_to games_path, notice: "Game was successfully destroyed."
+    redirect_to games_path, notice: 'Game was successfully destroyed.'
   end
 
   private

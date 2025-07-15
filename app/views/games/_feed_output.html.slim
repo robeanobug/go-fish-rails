@@ -1,21 +1,21 @@
 span
-- @game.go_fish.round_results.reverse.each do |result|
+- game.go_fish.round_results.reverse.each do |result|
   - if result.winner
       div class="feed__bubble feed__bubble--main"
         span 
-            = result.winner_output(@game.find_player(current_user))
+            = result.winner_output(game.find_player(user))
       - next
   .feed__bubble.feed__bubble--main
     span
-      = result.question(@game.find_player(current_user))
+      = result.question(game.find_player(user))
   .feed__response
       i.icon.ph.ph-arrow-bend-down-right
       .feed__bubble.feed__bubble--alert
         span
-          = result.response(@game.find_player(current_user))
+          = result.response(game.find_player(user))
   - if result.fished_card
     .feed__response
       i.icon.ph.ph-arrow-bend-down-right
       .feed__bubble.feed__bubble--sub
         span
-          = result.action(@game.find_player(current_user))
+          = result.action(game.find_player(user))

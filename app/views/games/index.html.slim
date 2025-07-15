@@ -1,27 +1,25 @@
 .app-with-sidebar
-  nav class="sidebar sidebar--drawer"
-    a class="sidebar__brand" href="/"
+  nav class='sidebar sidebar--drawer'
+    a class='sidebar__brand' href='/'
       span Go Fish
       span The Logo
     .sidebar__content.sidebar__content--start
-      = link_to "Games",
+      = link_to 'Games',
               games_path,
-              class: "btn btn--no-border"
-      button class="btn btn--no-border" Stats
+              class: 'btn btn--no-border'
+      button class='btn btn--no-border' Stats
     .sidebar__content.sidebar__content--end
       .divider
-      button class="btn btn--no-border" Profile
-      = button_to "Log out", destroy_user_session_path, method: :delete, class: "btn btn--no-border"
-
-
+      button class='btn btn--no-border' Profile
+      = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header 
-      span class="game__heading" Your Games 
-      = link_to "New Game",
+      span class='game__heading' Your Games 
+      = link_to 'New Game',
               new_game_path,
-              class: "btn btn--primary"
+              class: 'btn btn--primary'
     - @games.each do |game|
-      = render game if game.users.include?(current_user)
+      = render partial: 'game_row', locals: { current_user: current_user, game: game } if game.users.include?(current_user)
     span class="game__heading" All Games 
     - @games.each do |game|
-      = render game unless game.users.include?(current_user)
+      = render partial: 'game_row', locals: { current_user: current_user, game: game } unless game.users.include?(current_user)

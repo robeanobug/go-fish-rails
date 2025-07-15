@@ -1,33 +1,39 @@
-.card
-  .game
-    span = link_to game.name, game_path(game)
-    div
-      - if game.users.count == game.player_count
-        span.card__subtitle This Game is Full
-      - else 
-        span.card_subtitle
-          = game.users.count 
-          = " / "
-          = game.player_count
-          = " players"
-  .game__actions
-    - if game.game_users.first.user_id == current_user.id
-      = button_to "Delete",
-            game_path(game),
-            method: :delete,
-            class: "btn btn--destructive btn--small"
-      = link_to "Edit",
-            edit_game_path(game),
-            class: "btn btn--light btn--small"
-      = link_to "Play Now",
-            game_path(game),
-            class: "btn btn--light btn--small"
-    - elsif game.users.include?(current_user)
-      = link_to "Play Now",
-            game_path(game),
-            class: "btn btn--light btn--small"
-    - else
-      = button_to "Join",
-            game_users_path,
-            params: { user_id: current_user, game_id: game },
-            class: "btn btn--light btn--small"
+tag.div id="#{dom_id(game, user.id)}"
+  main.game-page
+    .panel.panel--main 
+      .panel__header 
+        = link_to sanitize("&larr; Back to games"), games_path
+        .game-board-heading
+          = game.name
+      .players-content 
+        .player-deck-content 
+          span.game__heading.game__heading--players Players:
+          = render 'games/accordion', game: game, user: user
+    .panel.panel--side
+      .panel__header.panel__header--alt
+        span.game__heading Game Feed
+        - if game.go_fish
+          .badge.badge--primary
+            = "#{game.go_fish.current_player.name}'s Turn"
+      .feed
+        .feed__container
+          .feed__output
+            = render 'games/feed_output', game: game, user: user if game.go_fish
+          .player-inputs 
+            = render 'games/round_form', game: game, user: user if game.go_fish
+    .panel.panel--sub
+      .panel__header.panel__header--sub
+        span Your Hand
+      .hand
+        .playing-cards
+          - if game.find_player(user)
+            - game.find_player(user).hand.each do |card|
+              = image_tag "#{card.rank}#{card.suit}.svg", alt: "#{card.rank} of #{card.suit}"
+    .panel.panel--sub
+      .panel__header.panel__header--sub
+        span Books
+      .hand
+        .playing-cards 
+          - if game.find_player(user)
+            - game.find_player(user).books.each do |book|
+              = image_tag "#{book.first.rank}Spades.svg", alt: "#{book.first.rank}s book"

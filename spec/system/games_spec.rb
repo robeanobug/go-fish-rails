@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, js: true do
+RSpec.describe "Games", type: :system, chrome: true do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
   let!(:user3) { create(:user) }
@@ -248,6 +248,15 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_text('You')
           expect(page).to have_text('winner')
         end
+      end
+    end
+    fit 'updates both users games automatically with turbo streams' do
+      load_game_user(user2)
+      game.play_round!('Aces', player2.name)
+      # binding.irb
+      # expect(page).to have_css('.feed_container')
+      within '.feed__container' do
+        expect(page).to have_text('asked')
       end
     end
   end
