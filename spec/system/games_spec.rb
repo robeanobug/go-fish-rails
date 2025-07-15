@@ -290,7 +290,7 @@ RSpec.describe "Games", type: :system, chrome: true do
     end
     fit 'automatically reloads page with action cable' do
       game.play_round!('Ace', user2.username)
-      # page.driver.refresh
+      page.driver.refresh
       binding.irb
     end
   end

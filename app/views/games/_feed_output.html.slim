@@ -1,4 +1,4 @@
-span
+div id='game_id' data-id=@game.id
 - @game.go_fish.round_results.reverse.each do |result|
   - if result.winner
       div class="feed__bubble feed__bubble--main"

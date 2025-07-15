@@ -1,7 +1,12 @@
 import consumer from "./consumer"
 import { Controller } from "@hotwired/stimulus"
 
-consumer.subscriptions.create({channel: "GameChannel", id: document.getElementById('game_id').dataset.id}, {
+consumer.subscriptions.create(
+{
+  channel: "GameChannel", 
+  id: document.getElementById('game_id').dataset.id
+},
+{
   connected() {
     console.log('Connected to Actioncable')
   },
@@ -11,7 +16,31 @@ consumer.subscriptions.create({channel: "GameChannel", id: document.getElementBy
   },
 
   received(data) {
-    window.location.reload()
+    this.appendLine(data)
+    console.log('Received data')
+    // console.log(data)
+  },
+
+  appendLine(data) {
+    const element = document.querySelector('.feed__output')
+    const html = this.createMessage(data)
+    if (element) {
+      element.insertAdjacentHTML("afterbegin", html)
+    }
+  },
+
+  createMessage(data) {
+    return `
+      <div class="feed__bubble feed__bubble--main">
+      <span>${data['question']}</span>
+      </div>
+      <div class="feed__bubble feed__bubble--alert">
+      <span>${data['response']}</span>
+      </div>
+      <div class="feed__bubble feed__bubble--sub">
+      <span>${data['action']}</span>
+      </div>
+      `
   }
 });
 
