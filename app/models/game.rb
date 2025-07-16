@@ -3,8 +3,6 @@ class Game < ApplicationRecord
   has_many :game_users, dependent: :destroy
   has_many :users, through: :game_users
 
-  # after_update -> { update_streams }
-
   broadcasts_refreshes
 
   validates :name, presence: true
