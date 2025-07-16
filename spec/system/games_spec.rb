@@ -256,8 +256,6 @@ RSpec.describe "Games", type: :system, chrome: true do
     it 'updates both users games automatically with turbo streams' do
       load_game_user(user2)
       game.play_round!('Aces', player2.name)
-      # binding.irb
-      # expect(page).to have_css('.feed_container')
       within '.feed__container' do
         expect(page).to have_text('asked')
       end
@@ -298,9 +296,8 @@ RSpec.describe "Games", type: :system, chrome: true do
     end
   end
 
-  fit 'should sort the cards' do
-    perform_enqueued_jobs do
-      your test content and expectations
-    end
+  it 'should sort the cards' do
+    # put data test id on the parent
+    # element = first element
   end
 end

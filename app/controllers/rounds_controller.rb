@@ -5,7 +5,6 @@ class RoundsController < ApplicationController
     @game = Game.find(params[:game_id])
     if @game.play_round!(round_params[:requested_rank], round_params[:target])
       redirect_to game_path(@game)
-      # redirect_to @game, notice: 'Round played successfully!'
     else
       redirect_to @game, unprocessable_entity
     end

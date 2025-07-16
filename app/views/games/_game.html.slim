@@ -19,21 +19,29 @@ tag.div id="#{dom_id(game, user.id)}"
         .feed__container
           .feed__output
             = render 'games/feed_output', game: game, user: user if game.go_fish
-          .player-inputs 
+          .player-inputs
             = render 'games/round_form', game: game, user: user if game.go_fish
-    .panel.panel--sub
+    .panel.panel--sub data-controller="hand"
       .panel__header.panel__header--sub
         span Your Hand
+        div data-controller="hello"
+          input data-hello-target="name" type="text"
+          button data-action="click->hello#greet" Greet
+        div
+          button data-action="click->hand#sort" Sort
       .hand
-        .playing-cards
+        .playing-cards data-hand-target='cardContainer'
           - if game.find_player(user)
             - game.find_player(user).hand.each do |card|
-              = image_tag "#{card.rank}#{card.suit}.svg", alt: "#{card.rank} of #{card.suit}"
+              = image_tag "#{card.rank}#{card.suit}.svg",
+                    alt: "#{card.rank} of #{card.suit}",
+                    data: { value: "#{card.value}", hand_target: 'card' }
+                    
     .panel.panel--sub
       .panel__header.panel__header--sub
         span Books
       .hand
-        .playing-cards 
+        .playing-cards
           - if game.find_player(user)
             - game.find_player(user).books.each do |book|
               = image_tag "#{book.first.rank}Spades.svg", alt: "#{book.first.rank}s book"

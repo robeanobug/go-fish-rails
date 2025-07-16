@@ -15,6 +15,10 @@
       = button_to "Delete",
             game_path(game),
             method: :delete,
+            data: { \
+              turbo_method: :delete,
+              turbo_confirm: 'Are you sure?',
+            },
             class: "btn btn--destructive btn--small"
       = link_to "Edit",
             edit_game_path(game),

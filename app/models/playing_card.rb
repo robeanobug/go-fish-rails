@@ -12,4 +12,8 @@ class PlayingCard
     rank == card.rank &&
     suit == card.suit
   end
+
+  def value
+    RANKS.index(rank)
+  end
 end

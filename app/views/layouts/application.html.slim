@@ -11,4 +11,7 @@ html data-theme-mode='light'
     link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@rolemodel/optics@2.1.3/dist/css/optics.css'
     meta content="width=device-width, initial-scale=1" name="viewport"
   body
+    = turbo_frame_tag 'modal'
+    = turbo_frame_tag 'panel'
+    = render 'confirm'
     = yield
