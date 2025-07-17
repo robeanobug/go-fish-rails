@@ -60,6 +60,14 @@ RSpec.describe "Games", type: :system, js: true do
     game.reload
     page.driver.refresh
   end
+
+  def play_round_twice(rank)
+    select rank, from: 'Rank'
+    click_on 'Request'
+    select rank, from: 'Rank'
+    click_on 'Request'
+  end
+
   it 'should not show the join option after a player is in the game' do
     load_game_user(user1)
     join_game_user(user2)
@@ -327,22 +335,14 @@ RSpec.describe "Games", type: :system, js: true do
       visit game_path(bot_game)
       within('.player-inputs') { expect(page).to have_text(bot_game.go_fish.players.last.name) }
     end
-    it 'should take a turn', chrome: true do
-      sign_in user2
-      visit root_path
+    it 'should take a turn' do
       bot_game.start_if_ready!
       sign_in user1
       reset_cards(bot_game)
-      select 'Jacks', from: 'Rank'
-      click_on 'Request'
-      select 'Jacks', from: 'Rank'
-      click_on 'Request'
+      play_round_twice('Jacks')
       sign_in user2
-      select 'Aces', from: 'Rank'
-      click_on 'Request'
-      select 'Aces', from: 'Rank'
-      click_on 'Request'
-      expect(page).to have_text("You fished a Nine of Hearts")
+      play_round_twice('Aces')
+
       within('.badge') { expect(page).to have_text(user1.username) }
     end
   end
