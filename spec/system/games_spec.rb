@@ -9,7 +9,9 @@ RSpec.describe "Games", type: :system, js: true do
 
   let!(:game) { create(:game, users: [ user1 ]) }
   let!(:game_three_players) { create(:game, name: 'Three Player Game', player_count: 3, users: [ user1, user2, user3 ]) }
-  let!(:bot_game) { create(:game, name: 'Bot Game', users: [ user1, user2 ], bot_count: 1) }
+  let!(:bot_game) { build(:game, player_count: 1, name: 'Bot Game', users: [ user1 ], bot_count: 1) }
+  let!(:bot_game_three_players) { create(:game, name: 'Bot Game Three Players', users: [ user1, user2 ], bot_count: 1) }
+
   let!(:bot_game_unjoined_user) { create(:game, name: 'Bot Game Unjoined User', users: [ user1 ], bot_count: 1) }
 
 
@@ -336,14 +338,26 @@ RSpec.describe "Games", type: :system, js: true do
       within('.player-inputs') { expect(page).to have_text(bot_game.go_fish.players.last.name) }
     end
     it 'should take a turn' do
-      bot_game.start_if_ready!
+      bot_game_three_players.start_if_ready!
       sign_in user1
-      reset_cards(bot_game)
+      reset_cards(bot_game_three_players)
       play_round_twice('Jacks')
       sign_in user2
       play_round_twice('Aces')
 
       within('.badge') { expect(page).to have_text(user1.username) }
+    end
+    it 'should start the game when there is one player and a bot', chrome: true do
+      sign_in user1
+      visit games_path
+      click_on 'New Game'
+      fill_in 'Name', with: bot_game.name
+      fill_in 'Player count', with: bot_game.player_count
+      fill_in 'Bot count', with: bot_game.bot_count
+      click_on 'Create game'
+      click_on bot_game.name
+
+      expect(page).to have_css('.badge')
     end
   end
 end

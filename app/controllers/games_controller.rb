@@ -14,7 +14,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
     @game.users << current_user
-
+    @game.start_if_ready!
     if @game.save
       redirect_to games_path, notice: 'Game was successfully created.'
     else
