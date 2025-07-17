@@ -24,9 +24,6 @@ tag.div id="#{dom_id(game, user.id)}"
     .panel.panel--sub data-controller="hand"
       .panel__header.panel__header--sub
         span Your Hand
-        div data-controller="hello"
-          input data-hello-target="name" type="text"
-          button data-action="click->hello#greet" Greet
         div
           button data-action="click->hand#sort" Sort
       .hand

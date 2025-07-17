@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe Game, type: :model do
   let!(:user1) { create(:user) }
   let!(:user2) { create(:user) }
+
   let!(:game) { create(:game, users: [ user1, user2 ]) }
+  let!(:bot_game) { create(:game, player_count: 1, users: [ user1 ], bot_count: 1) }
+
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
@@ -99,5 +102,22 @@ RSpec.describe Game, type: :model do
     game.start_if_ready!
     expect(game.is_current_player_turn?(user1)).to be true
     expect(game.is_current_player_turn?(user2)).to be false
+  end
+  it 'should create a bot player' do
+    bot_game.start_if_ready!
+    expect(bot_game.go_fish.players.count).to eq(2)
+  end
+  it 'bot should play a round at the end of someone elses turn' do
+    player1 = Player.new(user1.username)
+    player2 = Player.new(user2.username)
+    player1.hand = [ four_clubs ]
+    player2.hand = [ jack_hearts ]
+    player1.books = [ [ ace_clubs, ace_diamonds, ace_spades, ace_hearts ] ]
+    player1.books = [ [ king_clubs, king_diamonds, king_spades, king_hearts ] ]
+    deck = Deck.new
+    deck.cards = [ jack_spades ]
+    game.start_if_ready!
+    bot_game.start_if_ready!
+    expect(bot_game.go_fish.players.count).to eq(2)
   end
 end

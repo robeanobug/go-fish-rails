@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe GoFish do
-  let(:player1) { Player.new('Player 1') }
-  let(:player2) { Player.new('Player 2') }
-  let(:player3) { Player.new('Player 3') }
-  let(:player4) { Player.new('Player 4') }
+  let(:player1) { Player.new('Player 1', 1) }
+  let(:player2) { Player.new('Player 2', 2) }
+  let(:player3) { Player.new('Player 3', 3) }
+  let(:player4) { Player.new('Player 4', 4) }
+  let(:bot1) { Bot.new('Bot') }
 
   let(:gofish) { GoFish.new([ player1, player2 ]) }
   let(:gofish_4_players) { GoFish.new([ player1, player2, player3, player4 ]) }
+  let(:gofish_with_bot) { GoFish.new([ player1, bot1 ]) }
 
   let(:gofish_hash) { GoFish.dump(gofish) }
 
@@ -58,7 +60,9 @@ RSpec.describe GoFish do
     gofish.deal_cards
     deck = gofish.deck
     gofish.play_round!('Ace', player2)
-    game = GoFish.load(GoFish.dump(gofish))
+    gofish_json = GoFish.dump(gofish)
+    # binding.irb
+    game = GoFish.load(gofish_json)
     expect(game.players).to eq [ player1, player2 ]
     expect(game.deck.cards).to eq deck.cards
     expect(game.players).to include game.current_player
@@ -133,5 +137,27 @@ RSpec.describe GoFish do
         expect(result.last.winner_output(player1)).to be nil
       end
     end
+  end
+  it 'should play a bots turn at the end of a users' do
+    player1.hand = [ ace_hearts, king_diamonds ]
+    bot1.hand = [ king_clubs ]
+
+    gofish_with_bot.deck.cards = [ two_spades, two_hearts ]
+
+    gofish_with_bot.play_round!(ace_diamonds.rank, bot1)
+
+    expect(gofish_with_bot.current_player).to eq(player1)
+  end
+  xit 'should play a bots turn at the end of a users' do
+    player1.hand = [ ace_hearts, king_diamonds ]
+    player2.hand = [ ace_diamonds ]
+    bot1.hand = [ king_clubs ]
+
+    gofish_with_bot.deck.cards = [ two_spades, two_hearts, ace_spades ]
+
+    gofish_with_bot.play_round!(king_diamonds.rank, player2)
+    gofish_with_bot.play_round!(ace_diamonds.rank, bot1)
+
+    expect(gofish_with_bot.current_player).to eq(player1)
   end
 end

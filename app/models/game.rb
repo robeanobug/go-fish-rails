@@ -6,13 +6,15 @@ class Game < ApplicationRecord
   broadcasts_refreshes
 
   validates :name, presence: true
-  validates :player_count, numericality: { greater_than: 1, less_than_or_equal_to: 6 }
+  validates :player_count, numericality: { greater_than: 0, less_than_or_equal_to: 6 }
+  validates :sum_of_players_and_bots, numericality: { greater_than: 0, less_than_or_equal_to: 6 }
 
   serialize :go_fish, coder: GoFish
 
   def start_if_ready!
     return false unless player_count == users.count
     players = users.map { |user| Player.new(user.username, user.id) }
+    bot_count.times { players << Player.new("#{Faker::Internet.username}bot") }
     self.go_fish = GoFish.new(players)
     go_fish.deal!
     save!
@@ -20,9 +22,7 @@ class Game < ApplicationRecord
 
   def play_round!(requested_rank, target_string)
     target = find_player(target_string)
-    fish = go_fish
-    fish.play_round!(requested_rank.chop, target)
-    self.go_fish = fish
+    go_fish.play_round!(requested_rank.chop, target)
     save!
   end
 
@@ -41,5 +41,12 @@ class Game < ApplicationRecord
 
   def turbo_stream_id(user)
     "games:#{self.id}:users:#{user.id}"
+  end
+
+  private
+
+  def sum_of_players_and_bots
+    bot_count = 0 if bot_count.nil?
+    player_count + bot_count
   end
 end

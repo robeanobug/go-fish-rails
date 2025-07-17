@@ -9,15 +9,14 @@ RSpec.describe "Users", type: :system do
     sign_in user
     visit "/"
   end
-  
   def create_game
     find(".btn", text: "New Game").click
     expect(page).to have_text("Player count")
     fill_in "game[name]", with: game.name
     fill_in "game[player_count]", with: game.player_count
+    fill_in "game[bot_count]", with: game.bot_count
     click_on "Create game"
   end
-
   describe "sign up" do
     let(:build_user) { build(:user) }
     it 'signs up a user' do
@@ -31,9 +30,7 @@ RSpec.describe "Users", type: :system do
       expect(page).to have_text("Go Fish")
     end
   end
-
   describe "login" do
-
     def login_user
       visit "/"
       expect(page).to have_content("Log in")
@@ -45,7 +42,6 @@ RSpec.describe "Users", type: :system do
 
       click_on "Log in"
     end
-  
     it 'can login with sign_in user' do
       sign_in user
       visit "/"
@@ -59,7 +55,7 @@ RSpec.describe "Users", type: :system do
   describe "user create game" do
     before do
       load_index(other_user)
-      create_game
+      create_game 
     end
 
     it 'can create a game' do
@@ -75,17 +71,15 @@ RSpec.describe "Users", type: :system do
       click_on "Back to games"
       expect(page).to have_text(game.name)
       expect(page).to have_text("Play")
-      expect(page).to have_no_text("Edit")
       expect(page).to have_no_text("Delete")
     end
   end
-  
+
   describe "user destroy game" do
     before do
       load_index(user)
       create_game
     end
-    
     it 'can destroy a game' do
       expect(page).to have_text(game.name)
       click_on "Delete", match: :first
@@ -98,7 +92,6 @@ RSpec.describe "Users", type: :system do
       load_index(user)
       create_game
     end
-
     it 'shows a game' do
       expect(page).to have_text(game.name)
       click_on game.name

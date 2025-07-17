@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_10_130030) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_16_170605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,6 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_10_130030) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "go_fish"
+    t.integer "bot_count"
   end
 
   create_table "users", force: :cascade do |t|

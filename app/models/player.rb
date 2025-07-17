@@ -6,7 +6,7 @@ class Player
   SMALL_HAND_SIZE = 5
   BOOK_LENGTH = 4
 
-  def initialize(name, user_id = 0, hand = [], books = [])
+  def initialize(name, user_id = nil, hand = [], books = [])
     @name = name
     @user_id = user_id
     @hand = hand

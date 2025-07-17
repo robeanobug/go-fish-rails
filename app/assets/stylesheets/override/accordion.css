@@ -55,12 +55,13 @@
   }
 
   summary {
+    display: block !important;
     .accordion__label {
       color: var(--op-color-primary-on-plus-eight);
       text-align: center;
     }
   }
-
+  
   &.accordion__content {
     display: flex;
     justify-content: space-between;

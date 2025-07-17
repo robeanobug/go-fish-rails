@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Player do
-  let(:player) { Player.new('Player 1') }
+  let(:player) { Player.new('Player 1', 1) }
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }

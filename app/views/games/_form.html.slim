@@ -5,6 +5,8 @@
 
   = f.input :name, input_html: { autofocus: true }, type: "String", placeholder: "Game 1", class: "form-control form-control--large"
   
-  = f.input :player_count, type: "Number", placeholder: "2", class: "form-control form-control--large"
+  = f.input :player_count, type: "Number", placeholder: "0", class: "form-control form-control--large"
+
+  = f.input :bot_count, type: "Number", placeholder: "0", class: "form-control form-control--large"
 
   = f.submit class: "btn btn--secondary"

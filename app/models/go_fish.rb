@@ -21,6 +21,7 @@ class GoFish
     round_results << RoundResult.new(winner: find_winner) if over?
     change_turns_if_possible(requested_rank, fished_card)
     draw_card_if_needed
+    play_round!(*current_player.make_selection(opponents)) if current_player.is_a?(Bot)
     round_results
   end
 
@@ -49,7 +50,9 @@ class GoFish
   end
 
   def self.from_json(json)
-    players = json['players'].map { |player_hash| Player.from_json(player_hash) }
+    players = json['players'].map do |player_hash|
+      player_hash['user_id'].nil? ? Bot.from_json(player_hash) : Player.from_json(player_hash)
+    end
     deck = Deck.new(json['deck']['cards'].map { |card_hash| PlayingCard.new(**card_hash.symbolize_keys) })
     current_player_index = json['current_player_index'].to_i
     round_results = json['round_results']&.map { |round_results_hash| RoundResult.from_json(round_results_hash) }  || []
@@ -66,7 +69,7 @@ class GoFish
   end
 
   def as_json
-    {
+   {
       players: players.map(&:as_json),
       current_player_index: current_player_index.to_s,
       deck: deck.as_json,
@@ -118,5 +121,9 @@ class GoFish
 
   def over?
     deck.empty? && players.all? { |player| player.out_of_cards? }
+  end
+
+  def opponents
+    players.reject { |player| player == current_player }
   end
 end
