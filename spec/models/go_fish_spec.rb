@@ -98,13 +98,18 @@ RSpec.describe GoFish do
       before do
         player1.hand = [ ace_hearts, king_diamonds ]
         player2.hand = [ ace_diamonds ]
-        gofish.deck.cards = [ ace_spades ]
       end
       it 'player1 goes fish and does not pull their requested card' do
+        gofish.deck.cards = [ ace_spades ]
         gofish.play_round!('King', player2)
         expect(player1.hand).to eq([ ace_hearts, king_diamonds, ace_spades ])
         expect(player2.hand).to eq([ ace_diamonds ])
         expect(gofish.current_player_index).to eq 1
+        expect(gofish.current_player).to eq player2
+      end
+      it 'should change turns if current a player requests a rank, does not get it, and can not draw a fished_card because the deck is empty' do
+        gofish.deck.cards = []
+        gofish.play_round!('King', player2)
         expect(gofish.current_player).to eq player2
       end
     end

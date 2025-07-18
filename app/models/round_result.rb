@@ -26,7 +26,7 @@ class RoundResult
   end
 
   def winner_output(player)
-    "#{subject(player)} the winner!" if winner
+    "#{subject(player)} the winner with #{winner.books.count} books!" if winner
   end
 
   def subject(player)

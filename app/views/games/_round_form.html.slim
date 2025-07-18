@@ -15,4 +15,4 @@
               disabled: !game.is_current_player_turn?(user)
   = f.button :submit, 'Request',
               class: 'btn btn--primary btn--small',
-              disabled: !game.is_current_player_turn?(user)
+              disabled: !game.is_current_player_turn?(user) || game.go_fish.over?

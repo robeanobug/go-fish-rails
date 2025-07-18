@@ -13,7 +13,6 @@ class Game < ApplicationRecord
 
   def start_if_ready!
     return false unless player_count == users.length
-    # binding.irb
     players = users.map { |user| Player.new(user.username, user.id) }
     bot_count.times { players << Player.new("#{Faker::Internet.username}bot") }
     self.go_fish = GoFish.new(players)

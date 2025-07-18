@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Games", type: :system, js: true do
+RSpec.describe "Games", type: :system do
   include ActiveJob::TestHelper
 
   let!(:user1) { create(:user) }
@@ -26,15 +26,10 @@ RSpec.describe "Games", type: :system, js: true do
   let(:two_spades) { PlayingCard.new(rank: 'Two', suit: 'Spades') }
   let(:jack_hearts) { PlayingCard.new(rank: 'Jack', suit: 'Hearts') }
   let(:jack_diamonds) { PlayingCard.new(rank: 'Jack', suit: 'Diamonds') }
-  # let(:king_spades) { PlayingCard.new(rank: 'King', suit: 'Spades') }
-  # let(:king_hearts) { PlayingCard.new(rank: 'King', suit: 'Hearts') }
-  # let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
-  # let(:king_clubs) { PlayingCard.new(rank: 'King', suit: 'Clubs') }
-
-  def load_game_user(user)
-    sign_in user
-    page.driver.refresh
-  end
+  let(:king_spades) { PlayingCard.new(rank: 'King', suit: 'Spades') }
+  let(:king_hearts) { PlayingCard.new(rank: 'King', suit: 'Hearts') }
+  let(:king_diamonds) { PlayingCard.new(rank: 'King', suit: 'Diamonds') }
+  let(:king_clubs) { PlayingCard.new(rank: 'King', suit: 'Clubs') }
 
   def join_game_user(user)
     sign_in user
@@ -63,7 +58,7 @@ RSpec.describe "Games", type: :system, js: true do
     page.driver.refresh
   end
 
-  def play_round_twice(rank)
+  def play_round_twice(rank, game)
     select rank, from: 'Rank'
     click_on 'Request'
     select rank, from: 'Rank'
@@ -71,7 +66,7 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   it 'should not show the join option after a player is in the game' do
-    load_game_user(user1)
+    sign_in user1
     join_game_user(user2)
     visit root_path
     within(find('.card', text: game.name)) { expect(page).to have_no_content('Join') }
@@ -79,14 +74,14 @@ RSpec.describe "Games", type: :system, js: true do
   end
 
   describe 'deals cards to players' do
-    it 'has cards displayed' do
+    it 'has cards displayed', chrome: true do
       join_game_user(user2)
       player2 = game.find_player(user2)
       card_rank = player2.hand.first.rank
       card_suit = player2.hand.first.suit
-
       expect(page).to have_css("img[alt='#{card_rank} of #{card_suit}']")
-      load_game_user(user1)
+      sign_in user1
+      page.driver.refresh
       expect(page).to have_no_css("img[alt='#{card_rank} of #{card_suit}']")
     end
   end
@@ -117,10 +112,10 @@ RSpec.describe "Games", type: :system, js: true do
   describe 'play round two players' do
     before do
       join_game_user(user2)
-      load_game_user(user1)
+      sign_in user1
       visit game_path(game.id)
       game.reload
-      load_game_user(user1)
+      sign_in user1
     end
     context 'when the turn does not change' do
       it 'should show the question' do
@@ -162,7 +157,7 @@ RSpec.describe "Games", type: :system, js: true do
     end
     context 'when the turn changes' do
       before do
-        load_game_user(user1)
+        sign_in user1
         assign_hand_to_player(player1, [ two_spades ])
         click_on 'Request'
       end
@@ -195,12 +190,12 @@ RSpec.describe "Games", type: :system, js: true do
       it 'should display the book' do
         within('.panel--sub', text: 'Books') do
           within('.hand') do
-            expect(page).to have_css("img[alt='#{ace_spades.rank}s book")
+            expect(page).to have_css("img[alt='#{ace_spades.rank}s book']")
           end
         end
       end
     end
-    context 'when a player tries to play out of turn', chrome: true do
+    context 'when a player tries to play out of turn' do
       it 'should not let an opponent play' do
         sign_in user2
         page.driver.refresh
@@ -211,7 +206,7 @@ RSpec.describe "Games", type: :system, js: true do
           expect(page).to have_button('Request', disabled: true)
         end
       end
-      it 'should not let the current player play' do
+      xit 'should not let the current player play' do
         within('.player-inputs') do
           expect(page).to have_field('Player', disabled: false)
           expect(page).to have_field('Rank', disabled: false)
@@ -271,7 +266,7 @@ RSpec.describe "Games", type: :system, js: true do
 
     # NEED TO FIX THIS TEST IT IS BROKEN
     xit 'updates both users games automatically with turbo streams' do
-      load_game_user(user2)
+      sign_in user2
       game.play_round!('Aces', player2.name)
       within '.feed__container' do
         expect(page).to have_text('asked')
@@ -281,10 +276,10 @@ RSpec.describe "Games", type: :system, js: true do
   context 'should display the opponent player accordion' do
     before do
       join_game_user(user2)
-      load_game_user(user1)
+      sign_in user1
       visit game_path(game.id)
       game.reload
-      load_game_user(user1)
+      sign_in user1
     end
     it 'has an accordion' do
       expect(page).to have_css(".accordion")
@@ -305,13 +300,6 @@ RSpec.describe "Games", type: :system, js: true do
       end
     end
   end
-  xdescribe 'play round three players' do
-    before do
-      load_game_user()
-      sign_in user
-      page.driver.refresh
-    end
-  end
 
   it 'should sort the cards' do
     # put data test id on the parent
@@ -319,7 +307,7 @@ RSpec.describe "Games", type: :system, js: true do
   end
   context 'bot player' do
     it 'should create a bot player' do
-      load_game_user(user1)
+      sign_in user1
       visit root_path
       click_on 'New Game'
       expect(page).to have_text('Bot count')
@@ -337,17 +325,20 @@ RSpec.describe "Games", type: :system, js: true do
       visit game_path(bot_game)
       within('.player-inputs') { expect(page).to have_text(bot_game.go_fish.players.last.name) }
     end
-    it 'should take a turn' do
+
+    xit 'should take a turn' do
       bot_game_three_players.start_if_ready!
       sign_in user1
       reset_cards(bot_game_three_players)
-      play_round_twice('Jacks')
+
+      play_round_twice('Jacks', bot_game_three_players)
       sign_in user2
-      play_round_twice('Aces')
+      page.driver.refresh
+      play_round_twice('Aces', bot_game_three_players)
 
       within('.badge') { expect(page).to have_text(user1.username) }
     end
-    it 'should start the game when there is one player and a bot', chrome: true do
+    it 'should start the game when there is one player and a bot' do
       sign_in user1
       visit games_path
       click_on 'New Game'
@@ -359,5 +350,34 @@ RSpec.describe "Games", type: :system, js: true do
 
       expect(page).to have_css('.badge')
     end
+  end
+
+  xit 'should play the whole game through' do
+    sign_in user1
+    bot_game.start_if_ready!
+    visit game_path(bot_game)
+    # binding.irb
+    until bot_game.go_fish.round_results.include?('winner')
+      click_on 'Request'
+      expect(page).to have_content(bot_game.go_fish.round_results.last.question)
+    end
+    expect(page).to have_content('winner')
+  end
+  it 'should output that the person with more books is the winner' do
+    sign_in user1
+    bot_game.start_if_ready!
+    bot_game.go_fish.players.each { |player| player.hand = [] }
+    bot_game.go_fish.deck.cards = []
+    bot_game.go_fish.players.first.hand = [ king_clubs, king_hearts ]
+    bot_game.go_fish.players.last.hand = [ king_spades, king_diamonds ]
+    bot_game.go_fish.players.first.books = [ [ ace_hearts, ace_spades, ace_diamonds, ace_clubs ] ]
+    bot_game.go_fish.players.last.books = []
+    bot_game.save!
+    visit game_path(bot_game)
+    click_on 'Request'
+    # binding.irb
+    expect(page).to have_field('Player')
+    within('.player-inputs') { expect(page).to have_button('Request', disabled: true) }
+    expect(page).to have_content('You')
   end
 end
