@@ -326,7 +326,7 @@ RSpec.describe "Games", type: :system do
       within('.player-inputs') { expect(page).to have_text(bot_game.go_fish.players.last.name) }
     end
 
-    xit 'should take a turn' do
+    it 'should take a turn' do
       bot_game_three_players.start_if_ready!
       sign_in user1
       reset_cards(bot_game_three_players)
@@ -352,7 +352,7 @@ RSpec.describe "Games", type: :system do
     end
   end
 
-  fit 'should play the whole game through', chrome: true do
+  xit 'should play the whole game through' do
     sign_in user1
     bot_game.start_if_ready!
     visit game_path(bot_game)
