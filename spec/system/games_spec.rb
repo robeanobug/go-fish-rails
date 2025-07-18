@@ -352,14 +352,15 @@ RSpec.describe "Games", type: :system do
     end
   end
 
-  xit 'should play the whole game through' do
+  fit 'should play the whole game through', chrome: true do
     sign_in user1
     bot_game.start_if_ready!
     visit game_path(bot_game)
-    # binding.irb
-    until bot_game.go_fish.round_results.include?('winner')
+    loop do
       click_on 'Request'
-      expect(page).to have_content(bot_game.go_fish.round_results.last.question)
+      expect(page).to have_content('asked')
+      bot_game.reload
+      exit if bot_game.go_fish.over?
     end
     expect(page).to have_content('winner')
   end
