@@ -37,7 +37,10 @@ RSpec.describe RoundResult do
   end
 
   context 'when a player has an empty hand an draws a card' do
-    it 'should send a message alerting the players that a player drew a card'
+    let(:result) { RoundResult.new(drawn_card_if_needed: fished_two, current_player: player1) }
+    it 'should send a message alerting the players that a player drew a card' do
+      expect(result.drew_card(player1)).to include('ran out of cards')
+    end
   end
 
   context 'when there is a winner' do

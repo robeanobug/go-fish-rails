@@ -1,10 +1,15 @@
 span
 - game.go_fish.round_results.each do |result|
   - if result.winner
-      div class="feed__bubble feed__bubble--main"
-        span 
-            = result.winner_output(game.find_player(user))
-      - next
+    .feed__bubble.feed__bubble--main
+      span 
+        = result.winner_output(game.find_player(user))
+    - next
+  - if result.drawn_card_if_needed 
+    .feed__bubble.feed__bubble--main
+      span 
+        = result.drew_card(game.find_player(user))
+    - next
   .feed__bubble.feed__bubble--main
     span
       = result.question(game.find_player(user))

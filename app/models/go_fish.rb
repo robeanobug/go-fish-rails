@@ -21,7 +21,7 @@ class GoFish
     round_results << RoundResult.new(winner: find_winner) if over?
     change_turns_if_possible(requested_rank, fished_card, taken_cards)
     draw_card_if_needed
-    play_round!(*current_player.make_selection(opponents)) if current_player.is_a?(Bot)
+    play_round!(*current_player.make_selection(opponents)) if current_player.is_a?(Bot) && !over?
     round_results
   end
 
@@ -112,7 +112,9 @@ class GoFish
 
   def draw_card_if_needed
     return if !current_player.hand.empty? || deck.empty?
-    current_player.add_cards(deal_card)
+    drawn_card_if_needed = deal_card
+    current_player.add_cards(drawn_card_if_needed)
+    round_results << RoundResult.new(drawn_card_if_needed:, current_player:)
   end
 
   def find_winner

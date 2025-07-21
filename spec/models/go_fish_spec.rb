@@ -153,7 +153,7 @@ RSpec.describe GoFish do
 
     expect(gofish_with_bot.current_player).to eq(player1)
   end
-  xit 'should play a bots turn at the end of a users' do
+  it 'should play a bots turn at the end of a users' do
     player1.hand = [ ace_hearts, king_diamonds ]
     player2.hand = [ ace_diamonds ]
     bot1.hand = [ king_clubs ]
@@ -164,5 +164,14 @@ RSpec.describe GoFish do
     gofish_with_bot.play_round!(ace_diamonds.rank, bot1)
 
     expect(gofish_with_bot.current_player).to eq(player1)
+  end
+  it 'should display when a player has to draw a card at the beginning of their turn' do
+    player1.hand = [ ace_diamonds ]
+    player2.hand = [ ace_hearts ]
+    gofish.deck.cards = [ two_hearts, two_spades ]
+    gofish.play_round!('Ace', player2)
+    gofish.play_round!('Ace', player2)
+    expect(player2.hand).to eq [ two_hearts ]
+    expect(gofish.round_results.last.drew_card(player1)).to include('ran out of cards')
   end
 end
