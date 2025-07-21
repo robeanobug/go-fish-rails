@@ -7,10 +7,14 @@
       = link_to 'Games',
               games_path,
               class: 'btn btn--no-border'
-      button class='btn btn--no-border' Stats
+      = link_to 'Stats',
+              stat_path(current_user),
+              class: 'btn btn--no-border'
     .sidebar__content.sidebar__content--end
       .divider
-      = link_to 'Profile', user_path(current_user), class: 'btn btn--no-border'
+      = link_to 'Profile',
+              user_path(current_user),
+              class: 'btn btn--no-border'
       = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header 

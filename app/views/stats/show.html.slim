@@ -18,10 +18,26 @@
       = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header
-      span.game__heading Your Profile 
-      = link_to 'Edit Profile',
-              edit_user_registration_path,
-              class: 'btn btn--primary'
-    .card.card--padded.card--shadow-large
-      span Username: #{current_user.username}
-      span Email: #{current_user.email}
+      span.game__heading Leaderboard 
+    table.table.table--auto-layout.table--default-density
+      thead
+        tr
+          th Total Games
+          th Games Won
+          th Total Time Played 
+          th Winning percentage
+      tbody
+        tr
+          td Episode IV - A New Hope
+          td 1977
+          td Original
+          td 4%
+        tr
+          td Episode V - The Empire Strikes Back
+          td 1980
+          td Original
+          td 1%
+      tfoot
+        tr
+          td colspan="2" Total movies
+          td colspan="1" 11
