@@ -24,7 +24,8 @@ class RoundResult
   def action(player)
     return if fished_card.nil?
     return "#{subject(player)} fished a #{fished_card.rank} of #{fished_card.suit}" if subject(player) == 'You'
-    "#{subject(player)} fished a card"
+    return "#{subject(player)} fished a card" if fished_card.rank != requested_rank
+    "#{subject(player)} fished a #{fished_card.rank}"
   end
 
   def winner_output(player)
