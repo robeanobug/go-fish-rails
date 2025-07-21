@@ -36,9 +36,9 @@
             td
               - percentage = (user.won_games.to_f / user.total_games) * 100 unless user.total_games == 0
               = "#{percentage.round(1)}%" if percentage
-            td time played
+            td = Time.at((user.time_played)).utc.strftime("%H:%M:%S")
       tfoot
         tr
           td All Users
           td colspan="3" = @users.sum(&:total_games)
-          td time played
+          td = Time.at((@users.sum(&:time_played))).utc.strftime("%H:%M:%S")
