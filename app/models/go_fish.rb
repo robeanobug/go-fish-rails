@@ -15,14 +15,19 @@ class GoFish
   end
 
   def play_round!(requested_rank, target)
+    round_info = get_round_info(requested_rank, target)
+    change_turns_if_possible(*round_info)
+    draw_card_if_needed
+    play_round!(*current_player.make_selection(opponents)) if current_player.is_a?(Bot) && !over?
+    round_results
+  end
+
+  def get_round_info(requested_rank, target)
     taken_cards = take_cards(requested_rank, target)
     fished_card = go_fish unless taken_cards || deck.empty?
     round_results << RoundResult.new(current_player:, requested_rank:, target:, taken_cards:, fished_card:)
     round_results << RoundResult.new(winner: find_winner) if over?
-    change_turns_if_possible(requested_rank, fished_card, taken_cards)
-    draw_card_if_needed
-    play_round!(*current_player.make_selection(opponents)) if current_player.is_a?(Bot) && !over?
-    round_results
+    [ requested_rank, fished_card, taken_cards ]
   end
 
   def take_cards(requested_rank, target)

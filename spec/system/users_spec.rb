@@ -100,7 +100,7 @@ RSpec.describe "Users", type: :system do
     end
   end
   describe "showing a profile page" do
-    fit 'should have a profile' do
+    it 'should have a profile' do
       load_index(user)
       expect(page).to have_text('Profile')
       click_on 'Profile'
