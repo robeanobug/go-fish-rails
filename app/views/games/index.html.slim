@@ -10,7 +10,7 @@
       button class='btn btn--no-border' Stats
     .sidebar__content.sidebar__content--end
       .divider
-      button class='btn btn--no-border' Profile
+      = link_to 'Profile', user_path(current_user), class: 'btn btn--no-border'
       = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header 

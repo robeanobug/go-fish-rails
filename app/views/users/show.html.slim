@@ -1,0 +1,23 @@
+.app-with-sidebar
+  nav class='sidebar sidebar--drawer'
+    a class='sidebar__brand' href='/'
+      span Go Fish
+      span The Logo
+    .sidebar__content.sidebar__content--start
+      = link_to 'Games',
+              games_path,
+              class: 'btn btn--no-border'
+      button class='btn btn--no-border' Stats
+    .sidebar__content.sidebar__content--end
+      .divider
+      button class='btn btn--no-border' Profile
+      = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
+  .app-body
+    .app__header
+      span.game__heading Your Profile 
+      = link_to 'Edit Profile',
+              edit_user_registration_path,
+              class: 'btn btn--primary'
+    .card.card--padded.card--shadow-large
+      span Username: #{current_user.username}
+      span Email: #{current_user.email}
