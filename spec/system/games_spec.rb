@@ -206,7 +206,7 @@ RSpec.describe "Games", type: :system do
           expect(page).to have_button('Request', disabled: true)
         end
       end
-      xit 'should not let the current player play' do
+      it 'should not let the current player play' do
         within('.player-inputs') do
           expect(page).to have_field('Player', disabled: false)
           expect(page).to have_field('Rank', disabled: false)
@@ -265,7 +265,7 @@ RSpec.describe "Games", type: :system do
     end
 
     # NEED TO FIX THIS TEST IT IS BROKEN
-    xit 'updates both users games automatically with turbo streams' do
+    xit 'updates both users games automatically with turbo streams', chrome: true do
       sign_in user2
       game.play_round!('Aces', player2.name)
       within '.feed__container' do
@@ -326,16 +326,15 @@ RSpec.describe "Games", type: :system do
       within('.player-inputs') { expect(page).to have_text(bot_game.go_fish.players.last.name) }
     end
 
-    it 'should take a turn' do
+    it 'should take a turn', js: true do
       bot_game_three_players.start_if_ready!
       sign_in user1
       reset_cards(bot_game_three_players)
-
       play_round_twice('Jacks', bot_game_three_players)
       sign_in user2
+      expect(page).to have_content(user1.username)
       page.driver.refresh
       play_round_twice('Aces', bot_game_three_players)
-
       within('.badge') { expect(page).to have_text(user1.username) }
     end
     it 'should start the game when there is one player and a bot' do
@@ -351,7 +350,7 @@ RSpec.describe "Games", type: :system do
       expect(page).to have_css('.badge')
     end
   end
-
+# Passes but breaks other tests
   xit 'should play the whole game through' do
     sign_in user1
     bot_game.start_if_ready!
@@ -364,21 +363,23 @@ RSpec.describe "Games", type: :system do
     end
     expect(page).to have_content('winner')
   end
-  it 'should output that the person with more books is the winner' do
-    sign_in user1
-    bot_game.start_if_ready!
-    bot_game.go_fish.players.each { |player| player.hand = [] }
-    bot_game.go_fish.deck.cards = []
-    bot_game.go_fish.players.first.hand = [ king_clubs, king_hearts ]
-    bot_game.go_fish.players.last.hand = [ king_spades, king_diamonds ]
-    bot_game.go_fish.players.first.books = [ [ ace_hearts, ace_spades, ace_diamonds, ace_clubs ] ]
-    bot_game.go_fish.players.last.books = []
-    bot_game.save!
-    visit game_path(bot_game)
-    click_on 'Request'
-    # binding.irb
-    expect(page).to have_field('Player')
-    within('.player-inputs') { expect(page).to have_button('Request', disabled: true) }
-    expect(page).to have_content('You')
+  context 'at the end of the game' do
+    before do
+      bot_game.start_if_ready!
+      bot_game.go_fish.deck.cards = []
+      bot_game.go_fish.players.first.hand = [ king_clubs, king_hearts ]
+      bot_game.go_fish.players.last.hand = [ king_spades, king_diamonds ]
+      bot_game.go_fish.players.first.books = [ [ ace_hearts, ace_spades, ace_diamonds, ace_clubs ] ]
+      bot_game.go_fish.players.last.books = []
+      bot_game.save!
+    end
+    it 'should output that the person with more books is the winner' do
+      sign_in user1
+      visit game_path(bot_game)
+      click_on 'Request'
+      expect(page).to have_field('Player')
+      within('.player-inputs') { expect(page).to have_button('Request', disabled: true) }
+      expect(page).to have_content('You')
+    end
   end
 end

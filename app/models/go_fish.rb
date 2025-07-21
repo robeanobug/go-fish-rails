@@ -46,6 +46,7 @@ class GoFish
     unless fished_card && requested_rank == fished_card.rank
       self.current_player_index = (players.index(current_player) + 1) % players.count
       self.current_player = players[current_player_index]
+      change_turns_if_possible(requested_rank, fished_card, taken_cards) if current_player.hand.empty? && deck.empty? && !over?
     end
   end
 

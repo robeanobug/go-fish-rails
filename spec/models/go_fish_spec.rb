@@ -8,6 +8,7 @@ RSpec.describe GoFish do
   let(:bot1) { Bot.new('Bot') }
 
   let(:gofish) { GoFish.new([ player1, player2 ]) }
+  let(:gofish_3_players) { GoFish.new([ player1, player2, bot1 ]) }
   let(:gofish_4_players) { GoFish.new([ player1, player2, player3, player4 ]) }
   let(:gofish_with_bot) { GoFish.new([ player1, bot1 ]) }
 
@@ -173,5 +174,12 @@ RSpec.describe GoFish do
     gofish.play_round!('Ace', player2)
     expect(player2.hand).to eq [ two_hearts ]
     expect(gofish.round_results.last.drew_card(player1)).to include('ran out of cards')
+  end
+  it 'should skip the current player turn if they do not have any cards and the deck is out' do
+    gofish_3_players.players.first.hand = [ ace_diamonds ]
+    gofish_3_players.players[1].hand = []
+    gofish_3_players.deck.cards = []
+    gofish_3_players.play_round!('Ace', gofish_3_players.players[1])
+    expect(gofish_3_players.current_player).to eq player1
   end
 end
