@@ -16,7 +16,8 @@ class RoundResult
   end
 
   def response(player)
-    return "#{subject(player)} took #{taken_cards.count} #{requested_rank}(s) from #{recipient(player)}" unless fished_card
+    return "#{subject(player)} took #{taken_cards.count} #{requested_rank}(s) from #{recipient(player)}" if fished_card.nil? && taken_cards.count > 0
+    return "Go fish: #{recipient(player)} does not have any #{requested_rank}s. Whoops! Nevermind, the deck is empty." if fished_card.nil? && taken_cards.count == 0
     "Go fish: #{recipient(player)} does not have any #{requested_rank}s"
   end
 

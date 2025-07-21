@@ -50,6 +50,13 @@ RSpec.describe RoundResult do
     end
   end
 
+  context 'when there is no fished card but the taken cards amount is zero' do
+    let(:result) { RoundResult.new(current_player: player1, target: player2, taken_cards: [], requested_rank: 'Ace', fished_card: nil) }
+    it 'should tell the players that the deck is empty' do
+      expect(result.response(player1)).to include 'deck is empty'
+    end
+  end
+
   describe 'serialization' do
     let(:result) { RoundResult.new(current_player: player1, target: player2, requested_rank: 'Ace', taken_cards:) }
     it 'should create a hash' do
