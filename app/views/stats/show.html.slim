@@ -25,16 +25,20 @@
           th Username
           th Total Games
           th Games Won
-          th Total Time Played 
           th Winning percentage
+          th Total Time Played 
       tbody
         - @users.each do |user|
           tr
             td = user.username
-            td total games
-            td games won
-            td winning percentage
+            td = user.total_games
+            td = user.won_games
+            td
+              - percentage = (user.won_games.to_f / user.total_games) * 100 unless user.total_games == 0
+              = "#{percentage.round(1)}%" if percentage
+            td time played
       tfoot
         tr
-          td colspan="2" Total movies
-          td colspan="1" 11
+          td All Users
+          td colspan="3" = @users.sum(&:total_games)
+          td time played

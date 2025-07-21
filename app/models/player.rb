@@ -34,6 +34,10 @@ class Player
     hand.empty?
   end
 
+  def player?
+    !user_id.nil?
+  end
+
   def ==(other_player)
     name == other_player.name &&
     user_id == other_player.user_id &&

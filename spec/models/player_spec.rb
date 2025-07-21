@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Player do
   let(:player) { Player.new('Player 1', 1) }
+  let(:bot) { Bot.new('Bot')}
   let(:ace_spades) { PlayingCard.new(rank: 'Ace', suit: 'Spades') }
   let(:ace_hearts) { PlayingCard.new(rank: 'Ace', suit: 'Hearts') }
   let(:ace_diamonds) { PlayingCard.new(rank: 'Ace', suit: 'Diamonds') }
@@ -75,5 +76,12 @@ RSpec.describe Player do
     expect(player.user_id).to be_a Integer
     expect(player.hand).to be_a Array
     expect(player.books).to be_a Array
+  end
+
+  it 'should return true if player is a player' do
+    expect(player.player?).to be true
+  end
+  it 'should return false if player is a bot' do
+    expect(bot.player?).to be false
   end
 end

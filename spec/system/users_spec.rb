@@ -108,11 +108,11 @@ RSpec.describe "Users", type: :system do
     end
   end
   describe "showing a stats page" do
-    fit 'should have a stats' do
+    it 'should have a stats' do
       load_index(user)
       expect(page).to have_text('Stats')
       click_on 'Stats'
-      expect(page).to have_text('Games played')
+      expect(page).to have_text('Leaderboard')
     end
   end
 end
