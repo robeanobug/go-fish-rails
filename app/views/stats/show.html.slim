@@ -22,21 +22,18 @@
     table.table.table--auto-layout.table--default-density
       thead
         tr
+          th Username
           th Total Games
           th Games Won
           th Total Time Played 
           th Winning percentage
       tbody
-        tr
-          td Episode IV - A New Hope
-          td 1977
-          td Original
-          td 4%
-        tr
-          td Episode V - The Empire Strikes Back
-          td 1980
-          td Original
-          td 1%
+        - @users.each do |user|
+          tr
+            td = user.username
+            td total games
+            td games won
+            td winning percentage
       tfoot
         tr
           td colspan="2" Total movies
