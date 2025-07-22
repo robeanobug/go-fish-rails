@@ -22,6 +22,10 @@ class User < ApplicationRecord
     save!
   end
 
+  def self.ransackable_attributes(auth_object = nil)
+    [ 'email', 'id', 'id_value', 'last_seen_at', 'remember_created_at', 'time_played', 'total_games', 'username', 'won_games' ]
+  end
+
   def percentage
     unless self.total_games == 0
       percent = ((self.won_games.to_f / self.total_games) * 100)

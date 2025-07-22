@@ -1,7 +1,8 @@
+# terminal: rails data:populate\[10,10]
+
 namespace :data do
   desc 'This task populates the database'
   task populate: :environment do |t, args|
-    # binding.irb
     user_count_arg = args.extras[0].to_i
     game_count_arg = args.extras[1].to_i
 
