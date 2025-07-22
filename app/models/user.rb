@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :games, through: :game_users
 
   validates :username, presence: true
+  paginates_per 20
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -19,5 +20,24 @@ class User < ApplicationRecord
 
     self.last_seen_at = Time.now
     save!
+  end
+
+  def percentage
+    unless self.total_games == 0
+      percent = ((self.won_games.to_f / self.total_games) * 100)
+      "#{percent.round(1)}%"
+    end
+  end
+
+  def time_in_game
+    Time.at((self.time_played)).utc.strftime('%H:%M:%S')
+  end
+
+  def self.total_user_games
+    self.all.sum(&:total_games)
+  end
+
+  def self.total_users_time_in_game
+    Time.at((self.all.sum(&:time_played))).utc.strftime('%H:%M:%S')
   end
 end

@@ -21,26 +21,4 @@
       = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header
-      span.game__heading Leaderboard 
-    = paginate @users
-    table.table.table--auto-layout.table--default-density
-      thead
-        tr
-          th Username
-          th Total Games
-          th Games Won
-          th Winning percentage
-          th Total Time Played 
-      tbody
-        - @users.each do |user|
-          tr
-            td = user.username
-            td = user.total_games
-            td = user.won_games
-            td = user.percentage
-            td = user.time_in_game
-      tfoot
-        tr
-          td All Users
-          td colspan="3" = User.total_user_games
-          td = User.total_users_time_in_game
+      span.game__heading History
