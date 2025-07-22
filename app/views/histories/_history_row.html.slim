@@ -1,0 +1,16 @@
+- if game.go_fish.over?
+  .card
+    .game
+      span = link_to game.name, game_path(game)
+      span = "Player Count: #{game.player_count + game.bot_count}"
+      span
+    .game__actions
+      - if game.game_users.first.user_id == current_user.id
+        = button_to "Delete",
+              game_path(game),
+              method: :delete,
+              data: { \
+                turbo_method: :delete,
+                turbo_confirm: 'Are you sure?',
+              },
+              class: "btn btn--destructive btn--small"

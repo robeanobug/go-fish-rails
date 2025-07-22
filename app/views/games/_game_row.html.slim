@@ -1,37 +1,38 @@
-.card
-  .game
-    span = link_to game.name, game_path(game)
-    div
-      - if game.users.count == game.player_count
-        span.card__subtitle This Game is Full
-      - else 
-        span.card_subtitle
-          = game.users.count 
-          = " / "
-          = game.player_count
-          = " players"
-  .game__actions
-    - if game.game_users.first.user_id == current_user.id
-      = button_to "Delete",
-            game_path(game),
-            method: :delete,
-            data: { \
-              turbo_method: :delete,
-              turbo_confirm: 'Are you sure?',
-            },
-            class: "btn btn--destructive btn--small"
-      = link_to "Edit",
-            edit_game_path(game),
-            class: "btn btn--light btn--small"
-      = link_to "Play Now",
-            game_path(game),
-            class: "btn btn--light btn--small"
-    - elsif game.users.include?(current_user)
-      = link_to "Play Now",
-            game_path(game),
-            class: "btn btn--light btn--small"
-    - else
-      = button_to "Join",
-            game_users_path,
-            params: { user_id: current_user, game_id: game },
-            class: "btn btn--light btn--small"
+- unless game.go_fish.over?
+  .card
+    .game
+      span = link_to game.name, game_path(game)
+      div
+        - if game.users.count == game.player_count
+          span.card__subtitle This Game is Full
+        - else 
+          span.card_subtitle
+            = game.users.count 
+            = " / "
+            = game.player_count
+            = " players"
+    .game__actions
+      - if game.game_users.first.user_id == current_user.id
+        = button_to "Delete",
+              game_path(game),
+              method: :delete,
+              data: { \
+                turbo_method: :delete,
+                turbo_confirm: 'Are you sure?',
+              },
+              class: "btn btn--destructive btn--small"
+        = link_to "Edit",
+              edit_game_path(game),
+              class: "btn btn--light btn--small"
+        = link_to "Play Now",
+              game_path(game),
+              class: "btn btn--light btn--small"
+      - elsif game.users.include?(current_user)
+        = link_to "Play Now",
+              game_path(game),
+              class: "btn btn--light btn--small"
+      - else
+        = button_to "Join",
+              game_users_path,
+              params: { user_id: current_user, game_id: game },
+              class: "btn btn--light btn--small"

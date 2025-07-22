@@ -1,4 +1,5 @@
 class HistoriesController < ApplicationController
-  def show
+  def index
+    @games = Game.all
   end
 end

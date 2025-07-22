@@ -11,7 +11,7 @@
               stat_path(current_user),
               class: 'btn btn--no-border'
       = link_to 'History',
-              history_path(current_user),
+              histories_path(current_user),
               class: 'btn btn--no-border'
     .sidebar__content.sidebar__content--end
       .divider
@@ -22,3 +22,8 @@
   .app-body
     .app__header
       span.game__heading History
+    - @games.each do |game|
+      = render partial: 'history_row', locals: { current_user: current_user, game: game } if game.users.include?(current_user)
+    span class="game__heading" All Games 
+    - @games.each do |game|
+      = render partial: 'history_row', locals: { current_user: current_user, game: game } unless game.users.include?(current_user)
