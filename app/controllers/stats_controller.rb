@@ -1,6 +1,7 @@
 class StatsController < ApplicationController
   def show
-    # @users = User.all
+    # @q = User.active.ransack(params[:q])
+    # @users = @q.result(distinct: true).page params[:page]
     @users = User.order(:username).page params[:page]
   end
 end

@@ -21,9 +21,9 @@
       = button_to 'Log out', destroy_user_session_path, method: :delete, class: "btn btn--no-border"
   .app-body
     .app__header
-      span.game__heading History
+      span.game__heading Your History
     - @games.each do |game|
       = render partial: 'history_row', locals: { current_user: current_user, game: game } if game.users.include?(current_user)
-    span class="game__heading" All Games 
+    span class="game__heading" All History
     - @games.each do |game|
       = render partial: 'history_row', locals: { current_user: current_user, game: game } unless game.users.include?(current_user)

@@ -1,9 +1,9 @@
-- if game.go_fish.over?
+- if game.over?
   .card
     .game
       span = link_to game.name, game_path(game)
       span = "Player Count: #{game.player_count + game.bot_count}"
-      span
+      span = "Winner: #{game.go_fish.find_winner.name}"
     .game__actions
       - if game.game_users.first.user_id == current_user.id
         = button_to "Delete",

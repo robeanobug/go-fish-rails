@@ -45,6 +45,10 @@ class Game < ApplicationRecord
     "games:#{self.id}:users:#{user.id}"
   end
 
+  def over?
+    go_fish.over?
+  end
+
   private
 
   def sum_of_players_and_bots
