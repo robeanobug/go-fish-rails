@@ -46,7 +46,7 @@ class Game < ApplicationRecord
   end
 
   def over?
-    go_fish.over?
+    go_fish&.over?
   end
 
   private
