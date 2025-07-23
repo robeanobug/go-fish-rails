@@ -27,25 +27,29 @@
       = f.search_field :username_cont
 
       = f.submit
-    = paginate @users
+    = paginate @leaderboards
     table.table.table--auto-layout.table--default-density
       thead
         tr
+          th User Id
           th Username
-          th Total Games
           th Games Won
+          th Games Lost
+          th Total Games
           th Winning percentage
           th Total Time Played 
       tbody
-        - @users.each do |user|
+        - @leaderboards.each do |leaderboard|
           tr
-            td = user.username
-            td = user.total_games
-            td = user.won_games
-            td = user.percentage
-            td = user.time_in_game
-      tfoot
-        tr
-          td All Users
-          td colspan="3" = User.total_user_games
-          td = User.total_users_time_in_game
+            td = leaderboard.id
+            td = leaderboard.username
+            td = leaderboard.games_won
+            td = leaderboard.games_lost
+            td = leaderboard.total_games
+            td = leaderboard.percent
+            td = leaderboard.time_in_game
+      / tfoot
+      /   tr
+      /     td All Users
+      /     td colspan="3" = User.total_user_games
+      /     td = User.total_users_time_in_game

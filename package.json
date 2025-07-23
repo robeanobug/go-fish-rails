@@ -26,5 +26,6 @@
     "@rolemodel/optics": "^2.1.4",
     "@rolemodel/turbo-confirm": "^2.1.1"
   },
-  "type": "module"
+  "type": "module",
+  "packageManager": "yarn@1.22.22"
 }

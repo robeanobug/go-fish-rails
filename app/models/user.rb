@@ -3,7 +3,6 @@ class User < ApplicationRecord
   has_many :games, through: :game_users
 
   validates :username, presence: true
-  paginates_per 20
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -22,10 +21,6 @@ class User < ApplicationRecord
     save!
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    [ 'email', 'id', 'id_value', 'last_seen_at', 'remember_created_at', 'time_played', 'total_games', 'username', 'won_games' ]
-  end
-
   def percentage
     unless self.total_games == 0
       percent = ((self.won_games.to_f / self.total_games) * 100)
@@ -34,7 +29,7 @@ class User < ApplicationRecord
   end
 
   def time_in_game
-    Time.at((self.time_played)).utc.strftime('%H:%M:%S')
+    Time.at(self.time_played).utc.strftime('%H:%M:%S')
   end
 
   def self.total_user_games

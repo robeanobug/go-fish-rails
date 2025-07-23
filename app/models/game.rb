@@ -24,7 +24,10 @@ class Game < ApplicationRecord
   def play_round!(requested_rank, target_string)
     target = find_player(target_string)
     go_fish.play_round!(requested_rank.chop, target)
-    add_game_won_to_winner(go_fish.find_winner) if go_fish.over?
+    if go_fish.over?
+      add_winner_to_game(go_fish.find_winner)
+      stop_clock
+    end
     save!
   end
 
@@ -71,7 +74,19 @@ class Game < ApplicationRecord
     end
   end
 
+  def add_winner_to_game(winner_player)
+    winner_user = find_user(winner_player)
+    if winner_user
+      self.winner = winner_user.id
+      save!
+    end
+  end
+
   def find_user(player)
     users.find { |user| user.id == player.user_id }
+  end
+
+  def stop_clock
+    self.time_played = Time.now - time_started
   end
 end
