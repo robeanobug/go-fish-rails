@@ -91,11 +91,11 @@ class Game < ApplicationRecord
   end
 
   def bots_array
-    bot_names = generate_username.shuffle.take(bot_count)
+    bot_names = username_array.shuffle.take(bot_count)
     bot_names.map { |name| Bot.new("#{name}bot") }
   end
 
-  def generate_username
+  def username_array
     [ 'Marsha Mellow', 'Chip Munk', 'Anita Bath', 'Sal Monella', 'Walter Melon', 'Major Payne', 'Joe King', "Al O'Vera", 'Kerry Oki', 'Ella Vator', 'Noah Lott', 'Willie Makeit',
   'Noah Dia', 'Candace Spencer', 'Ray D. Ater', 'Tim Burr', 'Tish Hughes', 'Holden Aseck', 'Cy Nara', 'Ty Coon', 'Polly Ester', 'Chris P. Bacon' ]
   end
