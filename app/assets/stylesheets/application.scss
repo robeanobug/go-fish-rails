@@ -1,5 +1,5 @@
-// @use '@rolemodel/optics/dist/scss/optics';
-// @import '@rolemodel/optics/dist/css/addons/fonts/phosphor_icons';
+// @use '@rolemodel/optics/dist/css/optics';
+// @use '@rolemodel/optics/dist/css/addons/fonts/phosphor_icons';
 // This is a manifest file that'll be compiled into application.css, which will include
 // all the files listed below.
 //
@@ -7,17 +7,17 @@
 // @use 'components/modal';
 
 /* Override */
-@use "./override/accordion";
+@use "./override/accordion.css";
 
 /* Game Page Content */
-@use "./app-body";
-@use "./card";
-@use "./feed";
-@use "./game-board";
-@use "./game-heading";
-@use "./game-page";
-@use "./hand";
-@use "./panel";
-@use "./players-content";
-@use "./player-inputs";
-@use "./playing-cards";
+@use "./app-body.css";
+@use "./card.css";
+@use "./feed.css";
+@use "./game-board.css";
+@use "./game-heading.css";
+@use "./game-page.css";
+@use "./hand.css";
+@use "./panel.css";
+@use "./players-content.css";
+@use "./player-inputs.css";
+@use "./playing-cards.css";

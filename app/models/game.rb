@@ -15,7 +15,7 @@ class Game < ApplicationRecord
     return false unless player_count == users.length
     add_game_to_user
     players = users.map { |user| Player.new(user.username, user.id) }
-    bot_count.times { players << Bot.new("#{Faker::Internet.username}bot") }
+    players = players.push(bots_array).flatten
     self.go_fish = GoFish.new(players)
     go_fish.deal!
     save!
@@ -88,5 +88,15 @@ class Game < ApplicationRecord
 
   def stop_clock
     self.time_played = Time.now - time_started
+  end
+
+  def bots_array
+    bot_names = generate_username.shuffle.take(bot_count)
+    bot_names.map { |name| Bot.new("#{name}bot") }
+  end
+
+  def generate_username
+    [ 'Marsha Mellow', 'Chip Munk', 'Anita Bath', 'Sal Monella', 'Walter Melon', 'Major Payne', 'Joe King', "Al O'Vera", 'Kerry Oki', 'Ella Vator', 'Noah Lott', 'Willie Makeit',
+  'Noah Dia', 'Candace Spencer', 'Ray D. Ater', 'Tim Burr', 'Tish Hughes', 'Holden Aseck', 'Cy Nara', 'Ty Coon', 'Polly Ester', 'Chris P. Bacon' ]
   end
 end
