@@ -31,13 +31,13 @@
     table.table.table--auto-layout.table--default-density
       thead
         tr
-          th User Id
-          th Username
-          th Games Won
-          th Games Lost
-          th Total Games
-          th Winning percentage
-          th Total Time Played 
+          th = sort_link(@q, :id, "User Id")
+          th = sort_link(@q, :username, "Username")
+          th = sort_link(@q, :games_won, "Games Won")
+          th = sort_link(@q, :games_lost, "Games Lost")
+          th = sort_link(@q, :total_games, "Total Games")
+          th = sort_link(@q, :percent, "Winning Percentage")
+          th = sort_link(@q, :time_in_game, "Total Time Played")
       tbody
         - @leaderboards.each do |leaderboard|
           tr
