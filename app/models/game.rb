@@ -13,9 +13,8 @@ class Game < ApplicationRecord
 
   def start_if_ready!
     return false unless player_count == users.length
-    add_game_to_user
-    players = users.map { |user| Player.new(user.username, user.id) }
-    players = players.push(bots_array).flatten
+    start_clock
+    players = create_players
     self.go_fish = GoFish.new(players)
     go_fish.deal!
     save!
@@ -54,16 +53,14 @@ class Game < ApplicationRecord
 
   private
 
+  def create_players
+    players = users.map { |user| Player.new(user.username, user.id) }
+    players = players.push(bots_array).flatten
+  end
+
   def sum_of_players_and_bots
     bot_count = 0 if bot_count.nil?
     player_count + bot_count
-  end
-
-  def add_game_to_user
-    users.each do |user|
-      user.total_games += 1
-      user.save!
-    end
   end
 
   def add_game_won_to_winner(winner_player)
@@ -84,6 +81,10 @@ class Game < ApplicationRecord
 
   def find_user(player)
     users.find { |user| user.id == player.user_id }
+  end
+
+  def start_clock
+    self.time_started = Time.now
   end
 
   def stop_clock

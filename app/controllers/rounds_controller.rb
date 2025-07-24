@@ -1,7 +1,6 @@
 class RoundsController < ApplicationController
   include ActionView::RecordIdentifier
   before_action :set_game
-  before_action :record_user_activity
   def create
     @game = Game.find(params[:game_id])
     if @game.play_round!(round_params[:requested_rank], round_params[:target])
@@ -19,9 +18,5 @@ class RoundsController < ApplicationController
 
   def set_game
     @game = Game.find(params[:game_id])
-  end
-
-  def record_user_activity
-    current_user.active_now! if current_user
   end
 end
