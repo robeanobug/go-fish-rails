@@ -1,6 +1,4 @@
-- if game.go_fish
-  - game.go_fish.players.each do |player|
-    - next if player == game.find_player(user)
+
     details class="accordion accordion--player"
       summary
         .accordion__label
@@ -22,7 +20,3 @@
         .playing-cards 
           - player.books.each do |book|
             = image_tag "#{book.first.rank}Spades.svg", alt: "#{book.first.rank}s book"
-- else
-  ul
-    - game.users do |user|
-      li = "Hello, #{user.username}! Waiting for more players..."

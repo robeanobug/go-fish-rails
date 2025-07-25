@@ -2,13 +2,24 @@ tag.div id="#{dom_id(game, user.id)}"
   main.game-page
     .panel.panel--main 
       .panel__header 
-        = link_to sanitize("&larr; Back to games"), games_path
+        = link_to sanitize("&larr; Back to games"), games_path unless game.over?
+        = link_to sanitize("&larr; Back to history"), histories_path if game.over?
         .game-board-heading
           = game.name
       .players-content 
         .player-deck-content 
           span.game__heading.game__heading--players Players:
-          = render 'games/accordion', game: game, user: user
+          - if game.go_fish && game.find_player(user)
+            - game.go_fish.players.each do |player|
+              - next if player == game.find_player(user)
+              = render 'games/accordion', game: game, player: player 
+          - elsif game.go_fish && game.find_player(user).nil?
+            - game.go_fish.players.each do |player|
+              = render 'games/accordion', game: game, player: player
+          - else
+            ul
+              - game.users do |user|
+                li = "Hello, #{user.username}! Waiting for more players..."
     .panel.panel--side
       .panel__header.panel__header--alt
         span.game__heading Game Feed

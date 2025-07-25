@@ -38,13 +38,13 @@ class RoundResult
   end
 
   def subject(player)
-    return player.name == current_player.name ? 'You' : current_player.name if current_player
-    player.name == winner.name ? 'You are' : "#{winner.name} is" if winner
+    return player&.name == current_player.name ? 'You' : current_player.name if current_player
+    player&.name == winner.name ? 'You are' : "#{winner.name} is" if winner
   end
 
   def recipient(player)
     return if target.nil?
-    player.name == target.name ? 'you' : target.name
+    player&.name == target.name ? 'you' : target.name
   end
 
   def as_json
