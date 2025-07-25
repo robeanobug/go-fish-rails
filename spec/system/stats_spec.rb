@@ -10,7 +10,7 @@ RSpec.describe "Stats", type: :system do
   it 'should show the number games played' do
     expect(page).to have_text('Total Games')
     expect(page).to have_text('Games Won')
-    expect(page).to have_text('Winning percentage')
+    expect(page).to have_text('Winning Percentage')
     expect(page).to have_text('Total Time Played')
   end
 end
